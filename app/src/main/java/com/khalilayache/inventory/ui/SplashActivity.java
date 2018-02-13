@@ -29,7 +29,7 @@ public class SplashActivity extends BaseActivity {
   }
 
   private void startInventoryActivity() {
-    startActivity(DetailsActivity.createIntent(SplashActivity.this));
+    startActivity(InventoryActivity.createIntent(SplashActivity.this));
     finish();
   }
 
