@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="3dp">
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:paddingStart="8dp"
+      android:paddingEnd="8dp"
+      android:paddingTop="8dp"
+      android:paddingBottom="16dp">
+
+    <!-- region Title -->
+    <TextView
+        android:id="@+id/product_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/item_image"
+        android:layout_toStartOf="@id/item_stock"
+        android:text="@string/product"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <View
+        android:id="@+id/view_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="1.3dp"
+        android:layout_below="@id/product_title"
+        android:layout_marginTop="8dp"
+        android:background="#44000000"/>
+    <!-- endregion Title -->
+
+    <!-- region Name -->
+    <TextView
+        android:id="@+id/view_product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_title_line"
+        android:layout_marginTop="16dp"
+        android:text="@string/name"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/product_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_product_name"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:minLines="1"
+        android:lines="1"
+        android:background="@drawable/edit_text_background"
+        android:inputType="text"
+        tools:ignore="LabelFor"/>
+
+    <!-- endregion Title -->
+
+    <!-- region Description -->
+    <TextView
+        android:id="@+id/view_product_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_name"
+        android:layout_marginTop="8dp"
+        android:text="@string/description"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/product_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_product_description"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:maxLines="2"
+        android:background="@drawable/edit_text_background"
+        android:inputType="textMultiLine"
+        tools:ignore="LabelFor"/>
+
+    <!-- endregion Description -->
+
+    <!-- region Price -->
+    <TextView
+        android:id="@+id/view_product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_description"
+        android:layout_marginTop="8dp"
+        android:text="@string/price"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/product_price"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_product_price"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:background="@drawable/edit_text_background"
+        android:inputType="numberDecimal"
+        tools:ignore="LabelFor"/>
+
+    <!-- endregion Price -->
+
+    <!-- region Quantity -->
+    <TextView
+        android:id="@+id/view_product_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_price"
+        android:layout_marginTop="8dp"
+        android:text="@string/quantity"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/product_quantity"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_product_quantity"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:background="@drawable/edit_text_background"
+        android:inputType="number"
+        tools:ignore="LabelFor"/>
+
+    <!-- endregion Quantity -->
+
+  </RelativeLayout>
+
+</android.support.v7.widget.CardView>

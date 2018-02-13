@@ -1,0 +1,20 @@
+<resources>
+  <string name="app_name">Inventory</string>
+  <string name="product">Product</string>
+  <string name="name">Name</string>
+  <string name="description">Description</string>
+  <string name="price">Price</string>
+  <string name="quantity">Quantity</string>
+  <string name="photo">Photo</string>
+  <string name="photo_hint">Tap to add or change the photo</string>
+  <string name="supplier">Supplier</string>
+  <string name="email">Email</string>
+  <string name="phone">Phone</string>
+  <string name="order_more">Order more</string>
+  <string name="no_products_registered">No products registered</string>
+  <string name="add_some_products">Start adding some product</string>
+  <string name="save">Save</string>
+  <string name="delete">Delete</string>
+  <string name="insert_dummy_data">Insert dummy data</string>
+  <string name="delete_all_items">Delete all items</string>
+</resources>

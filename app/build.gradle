@@ -1,0 +1,32 @@
+apply plugin: 'com.android.application'
+
+android {
+  compileSdkVersion 26
+  defaultConfig {
+    applicationId "com.khalilayache.inventory"
+    minSdkVersion 19
+    targetSdkVersion 26
+    versionCode 1
+    versionName "1.0"
+  }
+  lintOptions {
+    disable 'GoogleAppIndexingWarning'
+    baseline file("lint-baseline.xml")
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  implementation "com.android.support:appcompat-v7:$supportLibsVersion"
+  implementation "com.android.support:recyclerview-v7:$supportLibsVersion"
+  implementation "com.android.support:design:$supportLibsVersion"
+  implementation "com.android.support:cardview-v7:$supportLibsVersion"
+
+  implementation "de.hdodenhof:circleimageview:$circleImageView"
+
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:orientation="vertical">
+
+  <ImageView
+      android:id="@+id/empty_storehouse_image"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:contentDescription="@null"
+      android:src="@drawable/empty_storehouse"/>
+
+  <TextView
+      android:id="@+id/empty_title_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="16dp"
+      android:text="@string/no_products_registered"
+      android:fontFamily="sans-serif-medium"
+      android:textAppearance="?android:textAppearanceMedium"/>
+
+  <TextView
+      android:id="@+id/empty_subtitle_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="8dp"
+      android:text="@string/add_some_products"
+      android:fontFamily="sans-serif"
+      android:textAppearance="?android:textAppearanceSmall"
+      android:textColor="#A2AAB0"/>
+
+</LinearLayout>

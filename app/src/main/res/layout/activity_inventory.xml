@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InventoryActivity">
+
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/inventory_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:paddingTop="8dp"
+      tools:listitem="@layout/inventory_list_item"
+      android:paddingBottom="8dp"/>
+
+  <ImageView
+      android:id="@+id/add_new_item"
+      android:layout_width="55dp"
+      android:layout_height="@dimen/add_item_size"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      android:layout_margin="16dp"
+      app:srcCompat="@drawable/add_item"
+      android:contentDescription="@null"/>
+</RelativeLayout>
