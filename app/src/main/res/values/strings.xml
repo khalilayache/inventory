@@ -17,4 +17,5 @@
   <string name="delete">Delete</string>
   <string name="insert_dummy_data">Insert dummy data</string>
   <string name="delete_all_items">Delete all items</string>
+  <string name="splash_text"><![CDATA[Inventory app developed by @khalilayache for\nUdacity Android Basics Nanodegree\nCode available in github.com/khalilayache]]></string>
 </resources>
