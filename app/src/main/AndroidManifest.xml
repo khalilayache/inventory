@@ -18,7 +18,9 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name=".ui.DetailsActivity"/>
+    <activity
+        android:name=".ui.DetailsActivity"
+        android:label="@string/add_new_product"/>
     <activity android:name=".ui.base.BaseActivity"/>
   </application>
 

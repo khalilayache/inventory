@@ -24,15 +24,12 @@ public class Product {
   private String supplier_email;
 
   //Phone of product supplier.
-  private String phone;
+  private String supplier_phone;
 
-  public Product() {}
-
-  public Product(String name, String description, Double price, String photo, String supplier_name, String
-      supplier_email, String phone) {this(name, description, price, 0, photo, supplier_name, supplier_email, phone);}
+  private Product() {}
 
   public Product(String name, String description, Double price, Integer quantity, String photo, String supplier_name, String
-      supplier_email, String phone) {
+      supplier_email, String supplier_phone) {
     this.name = name;
     this.description = description;
     this.price = price;
@@ -40,7 +37,7 @@ public class Product {
     this.photo = photo;
     this.supplier_name = supplier_name;
     this.supplier_email = supplier_email;
-    this.phone = phone;
+    this.supplier_phone = supplier_phone;
   }
 
   public String getName() {
@@ -99,11 +96,11 @@ public class Product {
     this.supplier_email = supplier_email;
   }
 
-  public String getPhone() {
-    return phone;
+  public String getSupplier_phone() {
+    return supplier_phone;
   }
 
-  public void setPhone(String phone) {
-    this.phone = phone;
+  public void setSupplier_phone(String supplier_phone) {
+    this.supplier_phone = supplier_phone;
   }
 }
