@@ -66,11 +66,11 @@ public class InventoryDbManager {
       Double price = cursor.getDouble(cursor.getColumnIndex(COLUMN_PRICE));
       Integer quantity = cursor.getInt(cursor.getColumnIndex(COLUMN_QUANTITY));
       String photo = cursor.getString(cursor.getColumnIndex(COLUMN_PHOTO));
-      String supplier_name = cursor.getString(cursor.getColumnIndex(COLUMN_SUPPLIER_NAME));
-      String supplier_email = cursor.getString(cursor.getColumnIndex(COLUMN_SUPPLIER_EMAIL));
-      String supplier_phone = cursor.getString(cursor.getColumnIndex(COLUMN_SUPPLIER_PHONE));
+      String supplierName = cursor.getString(cursor.getColumnIndex(COLUMN_SUPPLIER_NAME));
+      String supplierEmail = cursor.getString(cursor.getColumnIndex(COLUMN_SUPPLIER_EMAIL));
+      String supplierPhone = cursor.getString(cursor.getColumnIndex(COLUMN_SUPPLIER_PHONE));
 
-      productList.add(new Product(name, description, price, quantity, photo, supplier_name, supplier_email, supplier_phone));
+      productList.add(new Product(name, description, price, quantity, photo, supplierName, supplierEmail, supplierPhone));
     }
 
     cursor.close();
@@ -93,9 +93,9 @@ public class InventoryDbManager {
     values.put(COLUMN_PRICE, product.getPrice());
     values.put(COLUMN_QUANTITY, product.getQuantity());
     values.put(COLUMN_PHOTO, product.getPhoto());
-    values.put(COLUMN_SUPPLIER_NAME, product.getSupplier_name());
-    values.put(COLUMN_SUPPLIER_EMAIL, product.getSupplier_email());
-    values.put(COLUMN_SUPPLIER_PHONE, product.getSupplier_phone());
+    values.put(COLUMN_SUPPLIER_NAME, product.getSupplierName());
+    values.put(COLUMN_SUPPLIER_EMAIL, product.getSupplierEmail());
+    values.put(COLUMN_SUPPLIER_PHONE, product.getSupplierPhone());
 
     return values;
   }
@@ -118,20 +118,18 @@ public class InventoryDbManager {
           product.getQuantity() < 0) { return false; }
 
       //check if only supplier name is empty or null when email or phone is not null or empty
-      if ((product.getSupplier_name().isEmpty() || product.getSupplier_name() == null) &&
-          (!(product.getSupplier_phone().isEmpty() || product.getSupplier_phone() == null) ||
-              !(product.getSupplier_email().isEmpty() || product.getSupplier_email() == null))) {
+      if ((product.getSupplierName().isEmpty() || product.getSupplierName() == null) &&
+          (!(product.getSupplierPhone().isEmpty() || product.getSupplierPhone() == null) ||
+              !(product.getSupplierEmail().isEmpty() || product.getSupplierEmail() == null))) {
         return false;
       }
 
       //check if only supplier name is not empty when contacts fields are blank
-      if ((!product.getSupplier_name().isEmpty() && product.getSupplier_name() != null) &&
-          ((product.getSupplier_phone().isEmpty() || product.getSupplier_phone() == null) &&
-              (product.getSupplier_email().isEmpty() || product.getSupplier_email() == null))) {
+      if ((!product.getSupplierName().isEmpty() && product.getSupplierName() != null) &&
+          ((product.getSupplierPhone().isEmpty() || product.getSupplierPhone() == null) &&
+              (product.getSupplierEmail().isEmpty() || product.getSupplierEmail() == null))) {
         return false;
       }
-
-      //TODO(PHOTO VALIDATION)
 
     } else {
       return false;

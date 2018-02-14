@@ -118,6 +118,7 @@
 
     <!-- region Order Button-->
     <LinearLayout
+        android:id="@+id/order_more_container"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/supplier_phone"
@@ -125,6 +126,7 @@
         android:gravity="center"
         android:background="@drawable/order_more_button_background"
         android:clickable="true"
+        android:visibility="gone"
         android:focusable="true">
 
       <TextView

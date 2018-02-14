@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,18 +103,16 @@ public class InventoryActivity extends AppCompatActivity {
         getResources().getResourceTypeName(R.drawable.notebook_example) + '/' +
         getResources().getResourceEntryName(R.drawable.notebook_example));
 
-    Log.i(LOG_TAG, "Example photo uri: " + String.valueOf(imageUri));
-
     String name = getString(R.string.product_example_name);
     String description = getString(R.string.product_example_description);
     Double price = Double.parseDouble(getString(R.string.product_example_price));
     Integer quantity = Integer.parseInt(getString(R.string.product_example_quantity));
     String photo = String.valueOf(imageUri);
-    String supplier_name = getString(R.string.product_example_supplier_name);
-    String supplier_email = getString(R.string.product_example_supplier_email);
-    String supplier_phone = getString(R.string.product_example_supplier_phone);
+    String supplierName = getString(R.string.product_example_supplier_name);
+    String supplierEmail = getString(R.string.product_example_supplier_email);
+    String supplierPhone = getString(R.string.product_example_supplier_phone);
 
-    return new Product(name, description, price, quantity, photo, supplier_name, supplier_email, supplier_phone);
+    return new Product(name, description, price, quantity, photo, supplierName, supplierEmail, supplierPhone);
   }
 
   private void displayAllDatabaseInfo() {
@@ -124,7 +121,7 @@ public class InventoryActivity extends AppCompatActivity {
 
   private void displayDatabaseInfo(ArrayList<Product> products) {
 
-    TextView textProductInfo = findViewById(R.id.textProductInfo);
+    TextView textProductInfo = findViewById(R.id.text_product_info);
 
     textProductInfo.setText(getString(R.string.product_info_header, products.size()));
 
@@ -133,9 +130,9 @@ public class InventoryActivity extends AppCompatActivity {
           COLUMN_DESCRIPTION.toUpperCase() + "\t-\t" + product.getDescription() + "\n" +
           COLUMN_PRICE.toUpperCase() + "\t-\t" + product.getPrice() + "\n" +
           COLUMN_QUANTITY.toUpperCase() + "\t-\t" + product.getQuantity() + "\n" +
-          COLUMN_SUPPLIER_NAME.toUpperCase() + "\t-\t" + product.getSupplier_name() + "\n" +
-          COLUMN_SUPPLIER_EMAIL.toUpperCase() + "\t-\t" + product.getSupplier_email() + "\n" +
-          COLUMN_SUPPLIER_PHONE.toUpperCase() + "\t-\t" + product.getSupplier_phone() + "\n\n");
+          COLUMN_SUPPLIER_NAME.toUpperCase() + "\t-\t" + product.getSupplierName() + "\n" +
+          COLUMN_SUPPLIER_EMAIL.toUpperCase() + "\t-\t" + product.getSupplierEmail() + "\n" +
+          COLUMN_SUPPLIER_PHONE.toUpperCase() + "\t-\t" + product.getSupplierPhone() + "\n\n");
     }
   }
 }
