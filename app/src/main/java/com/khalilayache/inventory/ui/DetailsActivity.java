@@ -44,6 +44,7 @@ public class DetailsActivity extends BaseActivity {
     setContentView(R.layout.activity_details);
 
     initListeners();
+    initActivity();
   }
 
   @Override
@@ -62,10 +63,10 @@ public class DetailsActivity extends BaseActivity {
       case R.id.action_save:
         try {
           if (dbManager.insertProduct(getProduct())) {
-            Toast.makeText(this, "Dummy Product has been added successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Product has been added successfully", Toast.LENGTH_SHORT).show();
             finish();
           } else {
-            Toast.makeText(this, "Error while Dummy Product has been added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error while Product has been added", Toast.LENGTH_SHORT).show();
           }
         } catch (IllegalArgumentException e) {
           Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -78,6 +79,9 @@ public class DetailsActivity extends BaseActivity {
         } else {
           Toast.makeText(this, "Error while all products has been deleted", Toast.LENGTH_SHORT).show();
         }
+        return true;
+      case android.R.id.home:
+        super.onBackPressed();
         return true;
     }
     return super.onOptionsItemSelected(item);
@@ -143,6 +147,14 @@ public class DetailsActivity extends BaseActivity {
         checkReadStoragePermission();
       }
     });
+  }
+
+  private void initActivity() {
+
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
   }
 
   public void checkReadStoragePermission() {
