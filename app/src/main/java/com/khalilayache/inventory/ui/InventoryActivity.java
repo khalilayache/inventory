@@ -29,7 +29,6 @@ import com.khalilayache.inventory.model.Product;
 
 public class InventoryActivity extends AppCompatActivity {
 
-  private static final String LOG_TAG = "InventoryActivity";
   private InventoryDbManager dbManager = new InventoryDbManager(this);
 
   public static Intent createIntent(Context context) {
@@ -46,7 +45,7 @@ public class InventoryActivity extends AppCompatActivity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu options from the res/menu/menu_catalog.xml file.
+    // Inflate the menu options from the res/menu/menu_inventory.xml file.
     // This adds menu items to the app bar.
     getMenuInflater().inflate(R.menu.menu_inventory, menu);
     return true;
@@ -116,7 +115,7 @@ public class InventoryActivity extends AppCompatActivity {
   }
 
   private void displayAllDatabaseInfo() {
-    displayDatabaseInfo(dbManager.selectAllFromPets());
+    displayDatabaseInfo(dbManager.selectAllFromProducts());
   }
 
   private void displayDatabaseInfo(ArrayList<Product> products) {

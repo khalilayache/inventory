@@ -21,15 +21,31 @@ import com.khalilayache.inventory.model.Product;
 
 public class InventoryDbManager {
 
+  /**
+   * {@link InventoryDbHelper variable}.
+   */
   private InventoryDbHelper inventoryDb;
 
+  /**
+   * Constructor of the class.
+   *
+   * @param context of the app
+   */
   public InventoryDbManager(Context context) {
     this.inventoryDb = new InventoryDbHelper(context);
   }
 
+  /**
+   * Helper method to insert a product.
+   *
+   * @param product Product that will be inserted
+   *
+   * @return true if product was inserted successfully. False if not
+   */
   public boolean insertProduct(Product product) {
     ContentValues values;
 
+    //Check if there is a valid product if not throw an exception
     if (productValidation(product)) {
       values = getProductContentValues(product);
     } else {
@@ -39,26 +55,42 @@ public class InventoryDbManager {
     return insert(values) != -1L;
   }
 
+  /**
+   * Method to insert a product.
+   *
+   * @param values Content value variable with Product that will be inserted
+   *
+   * @return a Long with the number of lines that was inserted. Return -1 if got an error
+   */
   private Long insert(ContentValues values) {
+    //Get a writable instance of DB
     SQLiteDatabase productsTable = inventoryDb.getWritableDatabase();
 
     return productsTable.insert(TABLE_NAME, null, values);
   }
 
-  public ArrayList<Product> selectAllFromPets() {
+  /**
+   * Method to return all Products in products table.
+   *
+   * @return An ArrayList of Products with all Products inside
+   */
+  public ArrayList<Product> selectAllFromProducts() {
+    //Product Array List variable
     ArrayList<Product> productList = new ArrayList<>();
 
+    //Get a readable instance of db
     SQLiteDatabase productTable = inventoryDb.getReadableDatabase();
 
+    //Cursor instance with response of select query
     Cursor cursor = productTable.query(false,
-        TABLE_NAME,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null);
+        TABLE_NAME, // table name
+        null, // all columns so parameter is null
+        null, // no where clause
+        null, // no where arguments
+        null, // no groupBy clause
+        null, // no having clause
+        null, //no orderBy clause
+        null); // no limits items
 
     while (cursor.moveToNext()) {
       String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
@@ -78,13 +110,26 @@ public class InventoryDbManager {
     return productList;
   }
 
+  /**
+   * Method to delete all Products of products table.
+   *
+   * @return if command ran correctly return true, return false if not
+   */
   public boolean deleteAllProducts() {
+    //Get a writable instance of DB
     SQLiteDatabase productsTable = inventoryDb.getWritableDatabase();
 
     return productsTable.delete(TABLE_NAME, null, null) != -1;
 
   }
 
+  /**
+   * Method to get a Content Value variable of a Product .
+   *
+   * @param product that will be inserted in content value variable
+   *
+   * @return a content value variable with a Product info inside
+   */
   private ContentValues getProductContentValues(Product product) {
     ContentValues values = new ContentValues();
 
@@ -100,6 +145,13 @@ public class InventoryDbManager {
     return values;
   }
 
+  /**
+   * Method to guarantee if a Product is valid or not
+   *
+   * @param product that will be validate.
+   *
+   * @return if valid = true or false if not
+   */
   private boolean productValidation(Product product) {
 
     //check if product object is null

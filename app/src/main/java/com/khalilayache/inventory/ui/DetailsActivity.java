@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.khalilayache.inventory.ui.base.BaseActivity;
 
 public class DetailsActivity extends BaseActivity {
 
-  private static final String LOG_TAG = "DetailsActivity";
   private InventoryDbManager dbManager = new InventoryDbManager(this);
 
   private Uri photoUri = null;
@@ -179,8 +177,6 @@ public class DetailsActivity extends BaseActivity {
     if (photoUri == null) {
       photoUri = Uri.parse(getUriStringOfDrawable(R.drawable.item_list_placeholder));
     }
-
-    Log.i(LOG_TAG, "Photo uri: " + String.valueOf(photoUri));
 
     EditText productName = findViewById(R.id.product_name);
     EditText productDescription = findViewById(R.id.product_description);
