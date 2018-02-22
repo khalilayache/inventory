@@ -5,17 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="3dp">
+    android:layout_marginBottom="@dimen/default_margin"
+    app:cardElevation="@dimen/info_card_elevation"
+    app:cardCornerRadius="@dimen/info_card_radius">
 
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:paddingStart="8dp"
-      android:paddingEnd="8dp"
-      android:paddingTop="8dp"
-      android:paddingBottom="16dp">
+      android:paddingStart="@dimen/default_padding"
+      android:paddingEnd="@dimen/default_padding"
+      android:paddingTop="@dimen/default_padding"
+      android:paddingBottom="@dimen/info_padding_bottom">
 
     <!-- region Title -->
     <TextView
@@ -25,16 +25,17 @@
         android:layout_toEndOf="@id/item_image"
         android:layout_toStartOf="@id/item_stock"
         android:text="@string/supplier"
-        android:textSize="20sp"
+        android:textSize="@dimen/extra_large_font_size"
         android:textStyle="bold"/>
 
     <View
         android:id="@+id/view_title_line"
         android:layout_width="match_parent"
-        android:layout_height="1.3dp"
+        android:layout_height="@dimen/info_line_height"
         android:layout_below="@id/suplier_title"
-        android:layout_marginTop="8dp"
-        android:background="#44000000"/>
+        android:layout_marginBottom="@dimen/info_line_margin_bottom"
+        android:layout_marginTop="@dimen/default_margin"
+        android:background="@color/info_line_color"/>
     <!-- endregion Title -->
 
     <!-- region Name -->
@@ -43,9 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/view_title_line"
-        android:layout_marginTop="16dp"
         android:text="@string/name"
-        android:textSize="18sp"
+        android:textSize="@dimen/very_large_font_size"
         android:textStyle="bold"/>
 
     <EditText
@@ -53,11 +53,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/view_supplier_name"
-        android:padding="8dp"
-        android:textSize="16sp"
-        android:maxLines="1"
-        android:minLines="1"
-        android:lines="1"
+        android:padding="@dimen/default_padding"
+        android:textSize="@dimen/large_font_size"
+        android:lines="@integer/info_default_lines"
         tools:text="Testando"
         android:background="@drawable/edit_text_background"
         android:inputType="text"
@@ -71,9 +69,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/supplier_name"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/default_margin"
         android:text="@string/email"
-        android:textSize="18sp"
+        android:textSize="@dimen/very_large_font_size"
         android:textStyle="bold"/>
 
     <EditText
@@ -81,9 +79,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/view_supplier_email"
-        android:padding="8dp"
-        android:textSize="16sp"
-        android:maxLines="1"
+        android:padding="@dimen/default_padding"
+        android:textSize="@dimen/large_font_size"
+        android:lines="@integer/info_default_lines"
         tools:text="Testando"
         android:background="@drawable/edit_text_background"
         android:inputType="textEmailAddress"
@@ -97,9 +95,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/supplier_email"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/default_margin"
         android:text="@string/phone"
-        android:textSize="18sp"
+        android:textSize="@dimen/very_large_font_size"
         android:textStyle="bold"/>
 
     <EditText
@@ -120,9 +118,9 @@
     <LinearLayout
         android:id="@+id/order_more_container"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/info_phone_height"
         android:layout_below="@id/supplier_phone"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/info_order_more_margin"
         android:gravity="center"
         android:background="@drawable/order_more_button_background"
         android:clickable="true"
@@ -134,7 +132,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/order_more"
-          android:textSize="18sp"
+          android:textSize="@dimen/very_large_font_size"
           android:textStyle="bold"/>
 
     </LinearLayout>

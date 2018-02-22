@@ -2,28 +2,13 @@ package com.khalilayache.inventory.model;
 
 public class Product {
 
-  //Product's name.
   private String name;
-
-  //Product's description.
   private String description;
-
-  //Product's price.
   private Double price;
-
-  //Product's quantity in stock.
   private Integer quantity;
-
-  //Product's photo.
   private String photo;
-
-  //Name of product supplier.
   private String supplierName;
-
-  //Email of product supplier.
   private String supplierEmail;
-
-  //Phone of product supplier.
   private String supplierPhone;
 
   private Product() {}

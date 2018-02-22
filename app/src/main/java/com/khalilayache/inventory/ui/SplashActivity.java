@@ -7,7 +7,6 @@ import com.khalilayache.inventory.ui.base.BaseActivity;
 
 public class SplashActivity extends BaseActivity {
 
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -32,6 +31,5 @@ public class SplashActivity extends BaseActivity {
     startActivity(InventoryActivity.createIntent(SplashActivity.this));
     finish();
   }
-
 
 }

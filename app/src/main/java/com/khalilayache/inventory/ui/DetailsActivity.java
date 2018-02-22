@@ -2,7 +2,6 @@ package com.khalilayache.inventory.ui;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -57,25 +56,29 @@ public class DetailsActivity extends BaseActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     // User clicked on a menu option in the app bar overflow menu
     switch (item.getItemId()) {
-      // Respond to a click on the "Insert dummy data" menu option
+      // Respond to a click on the "Save Product" menu option
       case R.id.action_save:
         try {
-          if (dbManager.insertProduct(getProduct())) {
-            Toast.makeText(this, "Product has been added successfully", Toast.LENGTH_SHORT).show();
+          boolean productWasAdded = dbManager.insertProduct(getProduct());
+
+          if (productWasAdded) {
+            showToast(getString(R.string.product_add_success));
             finish();
           } else {
-            Toast.makeText(this, "Error while Product has been added", Toast.LENGTH_SHORT).show();
+            showToast(getString(R.string.product_add_error));
           }
         } catch (IllegalArgumentException e) {
-          Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+          showToast(e.getMessage());
         }
         return true;
-      // Respond to a click on the "Delete all entries" menu option
+      // Respond to a click on the "Delete" menu option
       case R.id.action_delete:
-        if (dbManager.deleteAllProducts()) {
-          Toast.makeText(this, "All Products has been deleted successfully", Toast.LENGTH_SHORT).show();
+        boolean productWasDeleted = dbManager.deleteAllProducts();
+
+        if (productWasDeleted) {
+          showToast(getString(R.string.products_delete_sucess));
         } else {
-          Toast.makeText(this, "Error while all products has been deleted", Toast.LENGTH_SHORT).show();
+          showToast(getString(R.string.products_delete_error));
         }
         return true;
       case android.R.id.home:
@@ -89,31 +92,14 @@ public class DetailsActivity extends BaseActivity {
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     if (requestCode == STORAGE_REQUEST_CODE) {
       if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        openSelector();
+        openImageSelector();
       } else {
         boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0]);
 
         if (!showRationale) {
-          Snackbar.make(findViewById(android.R.id.content), R.string.storage_permission_not_ask_true,
-              Snackbar.LENGTH_SHORT)
-              .setAction("Settings", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  Uri uri = Uri.fromParts(getString(R.string.scheme_package), DetailsActivity.this.getPackageName(), null);
-                  startActivity(new Intent().setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(uri));
-                }
-              })
-              .show();
+          showRationaleSnackBar();
         } else {
-          Snackbar.make(findViewById(android.R.id.content), R.string.storage_permission_not_granted,
-              Snackbar.LENGTH_SHORT)
-              .setAction("Retry", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  checkReadStoragePermission();
-                }
-              })
-              .show();
+          showPermissionDeniedSnackBar();
         }
       }
     }
@@ -135,8 +121,8 @@ public class DetailsActivity extends BaseActivity {
 
   }
 
+  // Method to initialize all listeners there is on Activity
   private void initListeners() {
-
     RelativeLayout photoContainer = findViewById(R.id.photo_container);
 
     photoContainer.setOnClickListener(new View.OnClickListener() {
@@ -147,6 +133,7 @@ public class DetailsActivity extends BaseActivity {
     });
   }
 
+  // Method to initialize some items that need a special handling on Activity
   private void initActivity() {
 
     if (getSupportActionBar() != null) {
@@ -155,6 +142,7 @@ public class DetailsActivity extends BaseActivity {
     }
   }
 
+  // Method to check if Read Storage Permission was granted
   public void checkReadStoragePermission() {
     if (ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -163,16 +151,18 @@ public class DetailsActivity extends BaseActivity {
           new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
       return;
     }
-    openSelector();
+    openImageSelector();
   }
 
-  private void openSelector() {
+  // Open the Image selector intent to get a product image
+  private void openImageSelector() {
     Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT)
         .addCategory(Intent.CATEGORY_OPENABLE)
         .setType(getString(R.string.intent_image_type));
     startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), PHOTO_INTENT_CODE);
   }
 
+  // Get all fields and return a Product
   private Product getProduct() {
     if (photoUri == null) {
       photoUri = Uri.parse(getUriStringOfDrawable(R.drawable.item_list_placeholder));
@@ -207,14 +197,31 @@ public class DetailsActivity extends BaseActivity {
       quantity = Integer.parseInt(quantityString);
     }
 
-
     return new Product(name, description, price, quantity, photo, supplierName, supplierEmail, supplierPhone);
   }
 
-  private String getUriStringOfDrawable(int drawableId) {
-    return ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-        getResources().getResourcePackageName(drawableId) + '/' +
-        getResources().getResourceTypeName(drawableId) + '/' +
-        getResources().getResourceEntryName(drawableId);
+  private void showRationaleSnackBar() {
+    Snackbar.make(findViewById(android.R.id.content), R.string.storage_permission_not_ask_true,
+        Snackbar.LENGTH_SHORT)
+        .setAction(getString(R.string.settings), new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            Uri uri = Uri.fromParts(getString(R.string.scheme_package), DetailsActivity.this.getPackageName(), null);
+            startActivity(new Intent().setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(uri));
+          }
+        })
+        .show();
+  }
+
+  private void showPermissionDeniedSnackBar() {
+    Snackbar.make(findViewById(android.R.id.content), R.string.storage_permission_not_granted,
+        Snackbar.LENGTH_SHORT)
+        .setAction(getString(R.string.retry), new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            checkReadStoragePermission();
+          }
+        })
+        .show();
   }
 }

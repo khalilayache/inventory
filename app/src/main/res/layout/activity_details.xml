@@ -8,28 +8,28 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="8dp"
-      android:layout_marginStart="8dp"
+      android:layout_marginEnd="@dimen/default_margin"
+      android:layout_marginStart="@dimen/default_margin"
       android:orientation="vertical">
 
     <include
         layout="@layout/product_info_card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="@dimen/default_margin"/>
 
     <include
         layout="@layout/product_photo_card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="@dimen/default_margin"/>
 
     <include
         layout="@layout/product_supplier_card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginBottom="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"/>
 
   </LinearLayout>
 

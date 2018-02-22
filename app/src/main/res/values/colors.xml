@@ -4,6 +4,8 @@
   <color name="colorPrimaryDark">#1A237E</color>
   <color name="colorAccent">#81d4fa</color>
   <color name="colorAccentDark">#546e7a</color>
+  <color name="empty_list_subtitle">#A2AAB0</color>
+  <color name="info_line_color">#44000000</color>
 </resources>
 
 

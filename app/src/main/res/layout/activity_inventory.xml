@@ -16,7 +16,7 @@
         android:id="@+id/text_product_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/default_margin"
         tools:text="Teste"/>
 
   </ScrollView>
@@ -25,20 +25,20 @@
       android:id="@+id/inventory_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginEnd="8dp"
-      android:layout_marginStart="8dp"
-      android:paddingTop="8dp"
+      android:layout_marginEnd="@dimen/default_margin"
+      android:layout_marginStart="@dimen/default_margin"
+      android:paddingTop="@dimen/default_padding"
+      android:paddingBottom="@dimen/default_padding"
       android:visibility="gone"
-      tools:listitem="@layout/inventory_list_item"
-      android:paddingBottom="8dp"/>
+      tools:listitem="@layout/inventory_list_item"/>
 
   <ImageView
       android:id="@+id/add_new_item"
-      android:layout_width="55dp"
+      android:layout_width="@dimen/add_item_size"
       android:layout_height="@dimen/add_item_size"
       android:layout_alignParentBottom="true"
       android:layout_alignParentEnd="true"
-      android:layout_margin="16dp"
+      android:layout_margin="@dimen/fab_margin"
       app:srcCompat="@drawable/add_item"
       android:contentDescription="@null"/>
 </RelativeLayout>

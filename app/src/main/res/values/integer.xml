@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <integer name="item_list_title_max_line">1</integer>
+  <integer name="item_list_subtitle_max_line">2</integer>
+  <integer name="item_list_stoc_max_line">1</integer>
+  <integer name="item_list_price_max_line">1</integer>
+
+  <integer name="info_default_lines">1</integer>
+  <integer name="info_description_lines">1</integer>
+  <integer name="info_price_length">6</integer>
+  <integer name="info_quantity_length">3</integer>
+</resources>

@@ -10,24 +10,22 @@ import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COL
 
 import java.util.ArrayList;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.khalilayache.inventory.R;
 import com.khalilayache.inventory.data.InventoryDbManager;
 import com.khalilayache.inventory.model.Product;
+import com.khalilayache.inventory.ui.base.BaseActivity;
 
-public class InventoryActivity extends AppCompatActivity {
+public class InventoryActivity extends BaseActivity {
 
   private InventoryDbManager dbManager = new InventoryDbManager(this);
 
@@ -55,22 +53,26 @@ public class InventoryActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     // User clicked on a menu option in the app bar overflow menu
     switch (item.getItemId()) {
-      // Respond to a click on the "Insert dummy data" menu option
+      // Respond to a click on the "Insert dummy product" menu option
       case R.id.action_insert_dummy_data:
-        if (dbManager.insertProduct(getDummyProduct())) {
-          Toast.makeText(this, "Dummy Product has been added successfully", Toast.LENGTH_SHORT).show();
+        boolean dummyProductWasAdded = dbManager.insertProduct(getDummyProduct());
+
+        if (dummyProductWasAdded) {
+          showToast(getString(R.string.dummy_add_sucess));
           displayAllDatabaseInfo();
         } else {
-          Toast.makeText(this, "Error while Dummy Product has been added", Toast.LENGTH_SHORT).show();
+          showToast(getString(R.string.dummy_add_error));
         }
         return true;
-      // Respond to a click on the "Delete all entries" menu option
+      // Respond to a click on the "Delete all products" menu option
       case R.id.action_delete_all_entries:
-        if (dbManager.deleteAllProducts()) {
-          Toast.makeText(this, "All Products has been deleted successfully", Toast.LENGTH_SHORT).show();
+        boolean productsWasDeleted = dbManager.deleteAllProducts();
+
+        if (productsWasDeleted) {
+          showToast(getString(R.string.dummy_delete_success));
           displayAllDatabaseInfo();
         } else {
-          Toast.makeText(this, "Error while all products has been deleted", Toast.LENGTH_SHORT).show();
+          showToast(getString(R.string.dummy_delete_error));
         }
         return true;
     }
@@ -97,10 +99,7 @@ public class InventoryActivity extends AppCompatActivity {
   private Product getDummyProduct() {
 
     // Get Uri for example photo from drawable resource
-    Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-        getResources().getResourcePackageName(R.drawable.notebook_example) + '/' +
-        getResources().getResourceTypeName(R.drawable.notebook_example) + '/' +
-        getResources().getResourceEntryName(R.drawable.notebook_example));
+    Uri imageUri = Uri.parse(getUriStringOfDrawable(R.drawable.notebook_example));
 
     String name = getString(R.string.product_example_name);
     String description = getString(R.string.product_example_description);

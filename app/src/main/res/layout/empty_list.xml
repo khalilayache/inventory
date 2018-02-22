@@ -19,7 +19,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="@dimen/default_margin"
       android:text="@string/no_products_registered"
       android:fontFamily="sans-serif-medium"
       android:textAppearance="?android:textAppearanceMedium"/>
@@ -29,10 +29,10 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
-      android:layout_marginTop="8dp"
+      android:layout_marginTop="@dimen/default_margin"
       android:text="@string/add_some_products"
       android:fontFamily="sans-serif"
       android:textAppearance="?android:textAppearanceSmall"
-      android:textColor="#A2AAB0"/>
+      android:textColor="@color/empty_list_subtitle"/>
 
 </LinearLayout>

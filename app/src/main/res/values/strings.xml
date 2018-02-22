@@ -36,8 +36,18 @@
   <string name="product_example_supplier_email">vendas@magazineluisa.com.br</string>
   <string name="product_example_supplier_phone">11 1234–5678</string>
   <string name="add_new_product">Add new product</string>
+  <string name="product_add_success">Product has been added successfully</string>
+  <string name="product_add_error">Error while Product has been added</string>
 
   <string name="intent_image_type">image/*</string>
   <string name="scheme_package">package</string>
+  <string name="products_delete_sucess">All Products has been deleted successfully</string>
+  <string name="products_delete_error">Error while all products has been deleted</string>
+  <string name="settings">Settings</string>
+  <string name="retry">Retry</string>
+  <string name="dummy_add_sucess">Dummy Product has been added successfully</string>
+  <string name="dummy_add_error">Error while Dummy Product has been added</string>
+  <string name="dummy_delete_success">All Products has been deleted successfully</string>
+  <string name="dummy_delete_error">Error while all products has been deleted</string>
 
 </resources>
