@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 public class BaseActivity extends AppCompatActivity {
 
-  public static final Integer SPLASH_INTENT_TIME_DELAY = 500;
+  public static final Integer SPLASH_INTENT_TIME_DELAY = 2000;
 
   public static final Integer STORAGE_REQUEST_CODE = 700;
 
