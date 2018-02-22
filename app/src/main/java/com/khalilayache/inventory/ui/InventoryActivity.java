@@ -54,7 +54,7 @@ public class InventoryActivity extends BaseActivity {
     // User clicked on a menu option in the app bar overflow menu
     switch (item.getItemId()) {
       // Respond to a click on the "Insert dummy product" menu option
-      case R.id.action_insert_dummy_data:
+      case R.id.action_insert_dummy_product:
         boolean dummyProductWasAdded = dbManager.insertProduct(getDummyProduct());
 
         if (dummyProductWasAdded) {
@@ -65,7 +65,7 @@ public class InventoryActivity extends BaseActivity {
         }
         return true;
       // Respond to a click on the "Delete all products" menu option
-      case R.id.action_delete_all_entries:
+      case R.id.action_delete_all_products:
         boolean productsWasDeleted = dbManager.deleteAllProducts();
 
         if (productsWasDeleted) {
