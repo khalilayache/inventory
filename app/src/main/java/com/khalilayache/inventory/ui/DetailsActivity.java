@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.khalilayache.inventory.R;
 import com.khalilayache.inventory.data.InventoryDbManager;
@@ -116,7 +115,7 @@ public class DetailsActivity extends BaseActivity {
         photoView.invalidate();
       }
     } else {
-      Toast.makeText(this, R.string.action_canceled, Toast.LENGTH_SHORT).show();
+      showToast(getString(R.string.action_canceled));
     }
 
   }
