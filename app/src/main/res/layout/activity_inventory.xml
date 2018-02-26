@@ -7,29 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.InventoryActivity">
 
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+  <include layout="@layout/empty_list"/>
 
-
-    <TextView
-        android:id="@+id/text_product_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
-        tools:text="Teste"/>
-
-  </ScrollView>
-
-  <android.support.v7.widget.RecyclerView
+  <ListView
       android:id="@+id/inventory_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginEnd="@dimen/default_margin"
       android:layout_marginStart="@dimen/default_margin"
       android:paddingTop="@dimen/default_padding"
+      android:divider="@android:color/transparent"
+      android:dividerHeight="@dimen/default_margin"
       android:paddingBottom="@dimen/default_padding"
-      android:visibility="gone"
+      android:scrollbars="none"
       tools:listitem="@layout/inventory_list_item"/>
 
   <ImageView

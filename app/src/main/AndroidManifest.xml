@@ -26,6 +26,11 @@
         android:windowSoftInputMode="stateHidden"
         android:label="@string/add_new_product"/>
     <activity android:name=".ui.base.BaseActivity"/>
+
+    <provider
+        android:name="com.khalilayache.inventory.data.ProductProvider"
+        android:authorities="com.khalilayache.inventory"
+        android:exported="false"/>
   </application>
 
 </manifest>

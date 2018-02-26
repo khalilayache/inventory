@@ -13,6 +13,8 @@ public class BaseActivity extends AppCompatActivity {
 
   public static final Integer PHOTO_INTENT_CODE = 701;
 
+  public static final Integer PRODUCT_LOADER_CODE = 300;
+
   // Get URI String of a Drawable Resource
   public String getUriStringOfDrawable(int drawableId) {
     return ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +

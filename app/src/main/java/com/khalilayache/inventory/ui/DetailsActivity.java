@@ -20,13 +20,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.khalilayache.inventory.R;
-import com.khalilayache.inventory.data.InventoryDbManager;
 import com.khalilayache.inventory.model.Product;
 import com.khalilayache.inventory.ui.base.BaseActivity;
 
 public class DetailsActivity extends BaseActivity {
-
-  private InventoryDbManager dbManager = new InventoryDbManager(this);
 
   private Uri photoUri = null;
 
@@ -57,34 +54,44 @@ public class DetailsActivity extends BaseActivity {
     switch (item.getItemId()) {
       // Respond to a click on the "Save Product" menu option
       case R.id.action_save:
-        try {
-          boolean productWasAdded = dbManager.insertProduct(getProduct());
-
-          if (productWasAdded) {
-            showToast(getString(R.string.product_add_success));
-            finish();
-          } else {
-            showToast(getString(R.string.product_add_error));
-          }
-        } catch (IllegalArgumentException e) {
-          showToast(e.getMessage());
-        }
+        saveProduct();
         return true;
       // Respond to a click on the "Delete" menu option
       case R.id.action_delete:
-        boolean productWasDeleted = dbManager.deleteAllProducts();
-
-        if (productWasDeleted) {
-          showToast(getString(R.string.products_delete_sucess));
-        } else {
-          showToast(getString(R.string.products_delete_error));
-        }
+        deleteProduct();
         return true;
       case android.R.id.home:
         super.onBackPressed();
         return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private void deleteProduct() {
+    //    boolean productWasDeleted = true;
+    //    //dbManager.deleteAllProducts();
+    //
+    //    if (productWasDeleted) {
+    //      showToast(getString(R.string.products_delete_sucess));
+    //    } else {
+    //      showToast(getString(R.string.products_delete_error));
+    //    }
+  }
+
+  private void saveProduct() {
+    //    try {
+    //      boolean productWasAdded = true;
+    //      //dbManager.insertProduct(getProduct());
+    //
+    //      if (productWasAdded) {
+    //        showToast(getString(R.string.product_add_success));
+    //        finish();
+    //      } else {
+    //        showToast(getString(R.string.product_add_error));
+    //      }
+    //    } catch (IllegalArgumentException e) {
+    //      showToast(e.getMessage());
+    //    }
   }
 
   @Override

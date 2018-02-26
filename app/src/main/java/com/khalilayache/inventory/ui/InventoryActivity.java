@@ -2,32 +2,37 @@ package com.khalilayache.inventory.ui;
 
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_DESCRIPTION;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_NAME;
+import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_PHOTO;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_PRICE;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_QUANTITY;
-import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_SUPPLIER_EMAIL;
-import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_SUPPLIER_NAME;
-import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_SUPPLIER_PHONE;
+import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.CONTENT_URI;
+import static com.khalilayache.inventory.data.InventoryContract.ProductEntry._ID;
 
-import java.util.ArrayList;
-
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.khalilayache.inventory.R;
-import com.khalilayache.inventory.data.InventoryDbManager;
+import com.khalilayache.inventory.adapter.ProductCursorAdapter;
 import com.khalilayache.inventory.model.Product;
 import com.khalilayache.inventory.ui.base.BaseActivity;
+import com.khalilayache.inventory.utils.ProductUtils;
 
-public class InventoryActivity extends BaseActivity {
+public class InventoryActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-  private InventoryDbManager dbManager = new InventoryDbManager(this);
+  private ProductCursorAdapter productCursorAdapter = new ProductCursorAdapter(this);
 
   public static Intent createIntent(Context context) {
     return new Intent(context, InventoryActivity.class);
@@ -39,6 +44,8 @@ public class InventoryActivity extends BaseActivity {
     setContentView(R.layout.activity_inventory);
 
     initListeners();
+    initList();
+    initLoader();
   }
 
   @Override
@@ -55,25 +62,11 @@ public class InventoryActivity extends BaseActivity {
     switch (item.getItemId()) {
       // Respond to a click on the "Insert dummy product" menu option
       case R.id.action_insert_dummy_product:
-        boolean dummyProductWasAdded = dbManager.insertProduct(getDummyProduct());
-
-        if (dummyProductWasAdded) {
-          showToast(getString(R.string.dummy_add_sucess));
-          displayAllDatabaseInfo();
-        } else {
-          showToast(getString(R.string.dummy_add_error));
-        }
+        insertDummyProduct();
         return true;
       // Respond to a click on the "Delete all products" menu option
       case R.id.action_delete_all_products:
-        boolean productsWasDeleted = dbManager.deleteAllProducts();
-
-        if (productsWasDeleted) {
-          showToast(getString(R.string.dummy_delete_success));
-          displayAllDatabaseInfo();
-        } else {
-          showToast(getString(R.string.dummy_delete_error));
-        }
+        deleteAllProducts();
         return true;
     }
     return super.onOptionsItemSelected(item);
@@ -82,7 +75,37 @@ public class InventoryActivity extends BaseActivity {
   @Override
   protected void onStart() {
     super.onStart();
-    displayAllDatabaseInfo();
+    //    displayAllDatabaseInfo();
+  }
+
+  @Override
+  public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    String[] projection = {
+        _ID,
+        COLUMN_NAME,
+        COLUMN_DESCRIPTION,
+        COLUMN_PHOTO,
+        COLUMN_PRICE,
+        COLUMN_QUANTITY
+    };
+
+    return new CursorLoader(this,
+        CONTENT_URI,
+        projection,
+        null,
+        null,
+        null
+    );
+  }
+
+  @Override
+  public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    productCursorAdapter.swapCursor(cursor);
+  }
+
+  @Override
+  public void onLoaderReset(Loader<Cursor> loader) {
+    productCursorAdapter.swapCursor(null);
   }
 
   private void initListeners() {
@@ -94,6 +117,43 @@ public class InventoryActivity extends BaseActivity {
         startActivity(DetailsActivity.createIntent(InventoryActivity.this));
       }
     });
+  }
+
+  private void initList() {
+    ListView productsList = findViewById(R.id.inventory_list);
+
+    View emptyView = findViewById(R.id.empty_view);
+    productsList.setEmptyView(emptyView);
+    productsList.setAdapter(productCursorAdapter);
+  }
+
+  private void initLoader() {
+    getSupportLoaderManager().initLoader(PRODUCT_LOADER_CODE, null, this);
+  }
+
+  private void deleteAllProducts() {
+    //    boolean productsWasDeleted = true;
+    //    //dbManager.deleteAllProducts();
+    //
+    //    if (productsWasDeleted) {
+    //      showToast(getString(R.string.dummy_delete_success));
+    //      //          displayAllDatabaseInfo();
+    //    } else {
+    //      showToast(getString(R.string.dummy_delete_error));
+    //    }
+  }
+
+  private void insertDummyProduct() {
+
+    ContentValues values = ProductUtils.getProductContentValues(getDummyProduct());
+
+    Long dummyProductWasAdded = ContentUris.parseId(getContentResolver().insert(CONTENT_URI, values));
+
+    if (dummyProductWasAdded != -1) {
+      showToast(getString(R.string.dummy_add_sucess));
+    } else {
+      showToast(getString(R.string.dummy_add_error));
+    }
   }
 
   private Product getDummyProduct() {
@@ -111,26 +171,5 @@ public class InventoryActivity extends BaseActivity {
     String supplierPhone = getString(R.string.product_example_supplier_phone);
 
     return new Product(name, description, price, quantity, photo, supplierName, supplierEmail, supplierPhone);
-  }
-
-  private void displayAllDatabaseInfo() {
-    displayDatabaseInfo(dbManager.selectAllFromProducts());
-  }
-
-  private void displayDatabaseInfo(ArrayList<Product> products) {
-
-    TextView textProductInfo = findViewById(R.id.text_product_info);
-
-    textProductInfo.setText(getString(R.string.product_info_header, products.size()));
-
-    for (Product product : products) {
-      textProductInfo.append(COLUMN_NAME.toUpperCase() + "\t-\t" + product.getName() + "\n" +
-          COLUMN_DESCRIPTION.toUpperCase() + "\t-\t" + product.getDescription() + "\n" +
-          COLUMN_PRICE.toUpperCase() + "\t-\t" + product.getPrice() + "\n" +
-          COLUMN_QUANTITY.toUpperCase() + "\t-\t" + product.getQuantity() + "\n" +
-          COLUMN_SUPPLIER_NAME.toUpperCase() + "\t-\t" + product.getSupplierName() + "\n" +
-          COLUMN_SUPPLIER_EMAIL.toUpperCase() + "\t-\t" + product.getSupplierEmail() + "\n" +
-          COLUMN_SUPPLIER_PHONE.toUpperCase() + "\t-\t" + product.getSupplierPhone() + "\n\n");
-    }
   }
 }
