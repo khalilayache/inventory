@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import com.khalilayache.inventory.R;
 import com.khalilayache.inventory.model.Product;
 import com.khalilayache.inventory.ui.base.BaseActivity;
+import com.khalilayache.inventory.utils.AndroidUtils;
 
 public class DetailsActivity extends BaseActivity {
 
@@ -171,7 +172,7 @@ public class DetailsActivity extends BaseActivity {
   // Get all fields and return a Product
   private Product getProduct() {
     if (photoUri == null) {
-      photoUri = Uri.parse(getUriStringOfDrawable(R.drawable.item_list_placeholder));
+      photoUri = Uri.parse(AndroidUtils.getUriStringOfDrawable(R.drawable.item_list_placeholder, this));
     }
 
     EditText productName = findViewById(R.id.product_name);

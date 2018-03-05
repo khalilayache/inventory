@@ -23,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/item_image"
-        android:layout_toStartOf="@id/item_stock"
         android:text="@string/supplier"
         android:textSize="@dimen/extra_large_font_size"
         android:textStyle="bold"/>

@@ -1,5 +1,6 @@
 package com.khalilayache.inventory.ui;
 
+import static com.khalilayache.inventory.adapter.ProductCursorAdapter.SellItemListClick;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_DESCRIPTION;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_NAME;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_PHOTO;
@@ -18,21 +19,25 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.khalilayache.inventory.R;
 import com.khalilayache.inventory.adapter.ProductCursorAdapter;
-import com.khalilayache.inventory.model.Product;
+import com.khalilayache.inventory.repository.ProductRepository;
 import com.khalilayache.inventory.ui.base.BaseActivity;
 import com.khalilayache.inventory.utils.ProductUtils;
 
-public class InventoryActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class InventoryActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, SellItemListClick {
 
-  private ProductCursorAdapter productCursorAdapter = new ProductCursorAdapter(this);
+  private ListView productsList;
+
+  private ProductCursorAdapter productCursorAdapter;
 
   public static Intent createIntent(Context context) {
     return new Intent(context, InventoryActivity.class);
@@ -43,8 +48,7 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_inventory);
 
-    initListeners();
-    initList();
+    initActivity();
     initLoader();
   }
 
@@ -70,12 +74,6 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
         return true;
     }
     return super.onOptionsItemSelected(item);
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    //    displayAllDatabaseInfo();
   }
 
   @Override
@@ -108,7 +106,12 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
     productCursorAdapter.swapCursor(null);
   }
 
-  private void initListeners() {
+  @Override
+  public void itemClick(int id, int quantityInStock) {
+    sellListItem(id, quantityInStock);
+  }
+
+  private void initFabListener() {
     ImageView fabImageView = findViewById(R.id.add_new_item);
 
     fabImageView.setOnClickListener(new View.OnClickListener() {
@@ -117,14 +120,29 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
         startActivity(DetailsActivity.createIntent(InventoryActivity.this));
       }
     });
+
+  }
+
+  private void initActivity() {
+    initFabListener();
+    initList();
   }
 
   private void initList() {
-    ListView productsList = findViewById(R.id.inventory_list);
-
+    productsList = findViewById(R.id.inventory_list);
     View emptyView = findViewById(R.id.empty_view);
+
+    productCursorAdapter = new ProductCursorAdapter(this, this);
+
     productsList.setEmptyView(emptyView);
     productsList.setAdapter(productCursorAdapter);
+
+    productsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.v(parent.toString(), "position: " + position + " id: " + id);
+      }
+    });
   }
 
   private void initLoader() {
@@ -132,44 +150,45 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
   }
 
   private void deleteAllProducts() {
-    //    boolean productsWasDeleted = true;
-    //    //dbManager.deleteAllProducts();
-    //
-    //    if (productsWasDeleted) {
-    //      showToast(getString(R.string.dummy_delete_success));
-    //      //          displayAllDatabaseInfo();
-    //    } else {
-    //      showToast(getString(R.string.dummy_delete_error));
-    //    }
+    int productsWasDeleted = getContentResolver().delete(CONTENT_URI, null, null);
+
+    if (productsWasDeleted != -1) {
+      showToast(getString(R.string.dummy_delete_success));
+    } else {
+      showToast(getString(R.string.dummy_delete_error));
+    }
   }
 
   private void insertDummyProduct() {
+    ProductRepository repository = new ProductRepository(this);
 
-    ContentValues values = ProductUtils.getProductContentValues(getDummyProduct());
+    ContentValues values = ProductUtils.getContentValuesFromProduct(repository.getRandomProduct());
 
     Long dummyProductWasAdded = ContentUris.parseId(getContentResolver().insert(CONTENT_URI, values));
 
     if (dummyProductWasAdded != -1) {
-      showToast(getString(R.string.dummy_add_sucess));
+      showToast(getString(R.string.dummy_add_success));
     } else {
       showToast(getString(R.string.dummy_add_error));
     }
   }
 
-  private Product getDummyProduct() {
+  private void sellListItem(int id, int quantityInStock) {
+    if (quantityInStock == 0) {
+      showToast(getString(R.string.product_out_stock));
+      return;
+    }
 
-    // Get Uri for example photo from drawable resource
-    Uri imageUri = Uri.parse(getUriStringOfDrawable(R.drawable.notebook_example));
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(COLUMN_QUANTITY, --quantityInStock);
 
-    String name = getString(R.string.product_example_name);
-    String description = getString(R.string.product_example_description);
-    Double price = Double.parseDouble(getString(R.string.product_example_price));
-    Integer quantity = Integer.parseInt(getString(R.string.product_example_quantity));
-    String photo = String.valueOf(imageUri);
-    String supplierName = getString(R.string.product_example_supplier_name);
-    String supplierEmail = getString(R.string.product_example_supplier_email);
-    String supplierPhone = getString(R.string.product_example_supplier_phone);
+    Uri updateURI = ContentUris.withAppendedId(CONTENT_URI, id);
+    int rowsUpdated = getContentResolver().update(updateURI, contentValues, null, null);
 
-    return new Product(name, description, price, quantity, photo, supplierName, supplierEmail, supplierPhone);
+    if (rowsUpdated < 1) {
+      showToast(getString(R.string.product_sold_error));
+    } else {
+      showToast(getString(R.string.product_sold_success));
+    }
   }
 }

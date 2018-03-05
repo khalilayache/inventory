@@ -22,7 +22,7 @@ public class ProductUtils {
    *
    * @return a content value variable with a Product info inside
    */
-  public static ContentValues getProductContentValues(Product product) {
+  public static ContentValues getContentValuesFromProduct(Product product) {
     ContentValues values = new ContentValues();
 
     values.put(COLUMN_NAME, product.getName());
@@ -35,6 +35,59 @@ public class ProductUtils {
     values.put(COLUMN_SUPPLIER_PHONE, product.getSupplierPhone());
 
     return values;
+  }
+
+  /**
+   * Method to create a Product object from a Content Value variable
+   *
+   * @param values that will used to create a Product object.
+   *
+   * @return the Product variable
+   */
+  public static Product getProductFromContentValues(ContentValues values) {
+
+    String name = null;
+    String description = null;
+    Double price = null;
+    Integer quantity = null;
+    String photo = null;
+    String supplierName = null;
+    String supplierEmail = null;
+    String supplierPhone = null;
+
+    if (values.containsKey(COLUMN_NAME)) {
+      name = values.getAsString(COLUMN_NAME);
+    }
+
+    if (values.containsKey(COLUMN_DESCRIPTION)) {
+      description = values.getAsString(COLUMN_DESCRIPTION);
+    }
+
+    if (values.containsKey(COLUMN_PRICE)) {
+      price = values.getAsDouble(COLUMN_PRICE);
+    }
+
+    if (values.containsKey(COLUMN_QUANTITY)) {
+      quantity = values.getAsInteger(COLUMN_QUANTITY);
+    }
+
+    if (values.containsKey(COLUMN_PHOTO)) {
+      photo = values.getAsString(COLUMN_PHOTO);
+    }
+
+    if (values.containsKey(COLUMN_SUPPLIER_NAME)) {
+      supplierName = values.getAsString(COLUMN_SUPPLIER_NAME);
+    }
+
+    if (values.containsKey(COLUMN_SUPPLIER_EMAIL)) {
+      supplierEmail = values.getAsString(COLUMN_SUPPLIER_EMAIL);
+    }
+
+    if (values.containsKey(COLUMN_SUPPLIER_PHONE)) {
+      supplierPhone = values.getAsString(COLUMN_SUPPLIER_PHONE);
+    }
+
+    return new Product(name, description, price, quantity, photo, supplierName, supplierEmail, supplierPhone);
   }
 
   /**
@@ -81,5 +134,4 @@ public class ProductUtils {
 
     return true;
   }
-
 }

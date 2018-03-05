@@ -31,7 +31,7 @@
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_toEndOf="@id/item_image"
-        android:layout_toStartOf="@id/item_stock"
+        android:layout_toStartOf="@id/item_quantity"
         android:maxLines="@integer/item_list_title_max_line"
         tools:text="Product name"
         android:textSize="@dimen/large_font_size"
@@ -47,7 +47,7 @@
         android:layout_marginEnd="@dimen/item_list_margin_title"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_toEndOf="@id/item_image"
-        android:layout_toStartOf="@id/item_buy"
+        android:layout_toStartOf="@id/item_sold"
         android:scrollbars="none"
         android:ellipsize="end"
         android:maxLines="@integer/item_list_subtitle_max_line"
@@ -56,12 +56,12 @@
         android:textAppearance="?android:textAppearanceSmall"/>
 
     <TextView
-        android:id="@+id/item_stock"
+        android:id="@+id/item_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@id/item_buy"
+        android:layout_alignStart="@id/item_sold"
         android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:textAlignment="center"
@@ -88,7 +88,7 @@
         android:textAppearance="?android:textAppearance"/>
 
     <ImageView
-        android:id="@+id/item_buy"
+        android:id="@+id/item_sold"
         android:layout_width="@dimen/item_list_buy_width"
         android:layout_height="@dimen/item_list_buy_height"
         android:layout_alignParentBottom="true"

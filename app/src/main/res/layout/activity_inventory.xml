@@ -7,18 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.InventoryActivity">
 
-  <include layout="@layout/empty_list"/>
+  <include
+      layout="@layout/empty_list"
+      android:visibility="gone"/>
 
   <ListView
       android:id="@+id/inventory_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginEnd="@dimen/default_margin"
-      android:layout_marginStart="@dimen/default_margin"
-      android:paddingTop="@dimen/default_padding"
+      android:padding="@dimen/default_padding"
+      android:clipToPadding="false"
+      android:overScrollMode="never"
       android:divider="@android:color/transparent"
       android:dividerHeight="@dimen/default_margin"
-      android:paddingBottom="@dimen/default_padding"
       android:scrollbars="none"
       tools:listitem="@layout/inventory_list_item"/>
 

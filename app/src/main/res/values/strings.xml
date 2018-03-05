@@ -28,26 +28,28 @@
       Nanodegree\nCode available in github.com/khalilayache]]>
   </string>
 
-  <string name="product_example_name">Notebook Samsung</string>
-  <string name="product_example_description">Ultrabook Samsung 530U3C-AD3 dark grey processor Intel® Core i5 2537M</string>
-  <string name="product_example_price">2499.00</string>
-  <string name="product_example_quantity">13</string>
-  <string name="product_example_supplier_name">Magazine Luisa</string>
-  <string name="product_example_supplier_email">vendas@magazineluisa.com.br</string>
-  <string name="product_example_supplier_phone">11 1234–5678</string>
   <string name="add_new_product">Add new product</string>
+
   <string name="product_add_success">Product has been added successfully</string>
   <string name="product_add_error">Error while Product has been added</string>
-
-  <string name="intent_image_type">image/*</string>
-  <string name="scheme_package">package</string>
   <string name="products_delete_sucess">All Products has been deleted successfully</string>
   <string name="products_delete_error">Error while all products has been deleted</string>
-  <string name="settings">Settings</string>
-  <string name="retry">Retry</string>
-  <string name="dummy_add_sucess">Dummy Product has been added successfully</string>
+
+  <string name="product_out_stock">Product out of stock</string>
+  <string name="product_sold_error">Error while product was sold</string>
+  <string name="product_sold_success">Product sold successfully</string>
+
+  <string name="dummy_add_success">Dummy Product has been added successfully</string>
   <string name="dummy_add_error">Error while Dummy Product has been added</string>
   <string name="dummy_delete_success">All Products has been deleted successfully</string>
   <string name="dummy_delete_error">Error while all products has been deleted</string>
+
+  <string name="intent_image_type" translatable="false">image/*</string>
+  <string name="scheme_package" translatable="false">package</string>
+
+  <string name="settings">Settings</string>
+  <string name="retry">Retry</string>
+  <string name="price_mask">$ %.2f</string>
+  <string name="stock_mask">Qty: %d</string>
 
 </resources>

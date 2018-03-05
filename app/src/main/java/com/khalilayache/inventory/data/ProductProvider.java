@@ -52,7 +52,9 @@ public class ProductProvider extends ContentProvider {
         throw new IllegalArgumentException("Cannot query unknown URI " + uri);
     }
 
-    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+    if (getContext() != null) {
+      cursor.setNotificationUri(getContext().getContentResolver(), uri);
+    }
 
     return cursor;
   }
@@ -71,12 +73,46 @@ public class ProductProvider extends ContentProvider {
 
   @Override
   public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-    return 0;
+    final int match = uriMatcher.match(uri);
+    switch (match) {
+      case PRODUCTS_LIST_URI_CODE:
+        return updateProduct(uri, values, selection, selectionArgs);
+      case PRODUCT_ITEM_URI_CODE:
+        selection = InventoryContract.ProductEntry._ID + "=?";
+        selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+        return updateProduct(uri, values, selection, selectionArgs);
+      default:
+        throw new IllegalArgumentException("Update is not supported for " + uri);
+    }
   }
 
   @Override
   public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-    return 0;
+    SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
+
+    int rowsDeleted;
+
+    final int match = uriMatcher.match(uri);
+    switch (match) {
+      case PRODUCTS_LIST_URI_CODE:
+        rowsDeleted = database.delete(InventoryContract.ProductEntry.TABLE_NAME, selection, selectionArgs);
+        break;
+      case PRODUCT_ITEM_URI_CODE:
+        selection = InventoryContract.ProductEntry._ID + "=?";
+        selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+        rowsDeleted = database.delete(InventoryContract.ProductEntry.TABLE_NAME, selection, selectionArgs);
+        break;
+
+      default:
+        throw new IllegalArgumentException("Deletion is not supported for " + uri);
+    }
+    if (rowsDeleted > 0) {
+      if (getContext() != null) {
+        getContext().getContentResolver().notifyChange(uri, null);
+      }
+    }
+
+    return rowsDeleted;
   }
 
   @Nullable
@@ -102,8 +138,23 @@ public class ProductProvider extends ContentProvider {
     if (id == -1) {
       return null;
     }
-    getContext().getContentResolver().notifyChange(uri, null);
+
+    if (getContext() != null) {
+      getContext().getContentResolver().notifyChange(uri, null);
+    }
 
     return ContentUris.withAppendedId(uri, id);
+  }
+
+  private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
+
+    int rowsUpdated = database.update(InventoryContract.ProductEntry.TABLE_NAME, values, selection, selectionArgs);
+
+    if (rowsUpdated > 0) {
+      if (getContext() != null) { getContext().getContentResolver().notifyChange(uri, null); }
+    }
+    return rowsUpdated;
+
   }
 }
