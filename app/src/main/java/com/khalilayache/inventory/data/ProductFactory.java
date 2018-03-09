@@ -1,6 +1,7 @@
 package com.khalilayache.inventory.data;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 import android.content.Context;
@@ -123,6 +124,9 @@ public class ProductFactory {
   }
 
   private static double getRandomPrice(int max) {
-    return ((1 + (max - 1) * new Random().nextDouble()));
+    double price = (1 + (max - 1) * new Random().nextDouble());
+    String priceString = String.format(Locale.getDefault(), "%.2f", price);
+    priceString = priceString.replace(",", ".");
+    return Double.parseDouble(priceString);
   }
 }

@@ -6,7 +6,7 @@
   <integer name="item_list_price_max_line">1</integer>
 
   <integer name="info_default_lines">1</integer>
-  <integer name="info_description_lines">1</integer>
-  <integer name="info_price_length">6</integer>
+  <integer name="info_description_lines">6</integer>
+  <integer name="info_price_length">7</integer>
   <integer name="info_quantity_length">3</integer>
 </resources>

@@ -1,0 +1,87 @@
+<resources>
+  <string name="app_name" translatable="false">Inventory</string>
+  <string name="product">Produto</string>
+  <string name="name">Nome</string>
+  <string name="description">Descrição</string>
+  <string name="price">Preço</string>
+  <string name="quantity">Quantidade</string>
+  <string name="photo">Foto</string>
+  <string name="photo_hint">Clique para adicionar ou trocar a foto</string>
+  <string name="supplier">Fornecedor</string>
+  <string name="email">Email</string>
+  <string name="phone">Telefone</string>
+  <string name="order_more">Comprar mais</string>
+  <string name="no_products_registered">Nenhum produto registrado</string>
+  <string name="add_some_products">Comece adicionando algum produto</string>
+  <string name="save">Salvar</string>
+  <string name="delete">Deletar</string>
+  <string name="insert_dummy_data">Inserir produto exemplo</string>
+  <string name="delete_all_items">Deletar todos os itens</string>
+  <string name="select_image">Selecione a imagem</string>
+  <string name="action_canceled">Ação cancelada</string>
+
+  <string name="storage_permission_not_granted">Persmissão de armazenamento foi negada</string>
+  <string name="storage_permission_not_ask_true"><![CDATA[Permissão de armazenamento foi negada permanentemente.\nVocê tem que permitir nas configurações.]]></string>
+
+  <string name="splash_text">
+      <![CDATA[Inventory app desenvolvido por @khalilayache para\nUdacity Android Basics
+      Nanodegree\nCódigo disponível em github.com/khalilayache]]>
+  </string>
+
+  <string name="add_new_product">Adicionar novo produto</string>
+  <string name="edit_product">Editar produto</string>
+
+  <string name="product_add_success">Produto adicionado com sucesso</string>
+  <string name="product_add_error">Erro ao adicionar o produto</string>
+  <string name="products_delete_success">Todos os produtos foram deletados com sucesso</string>
+  <string name="products_delete_error">Erro ao deletar todos os produtos</string>
+
+  <string name="product_out_stock">Produto fora de estoque</string>
+  <string name="product_sold_error">Erro ao vender o produto</string>
+  <string name="product_sold_success">Produto vendido com sucesso</string>
+
+  <string name="dummy_add_success">Produto exemplo adicionado com sucesso</string>
+  <string name="dummy_add_error">Erro ao adicionar um produto exemplo</string>
+
+  <string name="settings">Configurações</string>
+  <string name="retry">Tentar\nnovamente</string>
+
+  <string name="price_mask">R$ %.2f</string>
+  <string name="quantity_mask">Qtd: %d</string>
+
+  <string name="empty_name">Nome vazio</string>
+  <string name="empty_price">Preço vazio</string>
+  <string name="empty_quantity">Quantidade vazia</string>
+  <string name="empty_supplier_name">Nome do fornecedor vazio</string>
+  <string name="empty_supplier_email_phone">Email e telefone do fornecedor vazios.</string>
+  <string name="invalid_product">Produto inválido</string>
+
+  <string name="no_changes_made">Nenhuma alteração foi feita</string>
+  <string name="product_updated">Produto atualizado</string>
+  <string name="product_not_updated">Produto não foi atualizado</string>
+
+  <string name="new_add_success">Novo produto adicionado com sucesso</string>
+  <string name="new_add_error">Erro ao adicionar um novo produto</string>
+  <string name="delete_success">Produto deletado com sucesso</string>
+  <string name="delete_error">Erro ao deletar o produto</string>
+
+  <string name="invalid_inputs">Entradas inválidas:\n</string>
+  <string name="want_delete_item">Deseja deletar esse produto?</string>
+  <string name="want_discard_changes">Descartar as alterações feitas?</string>
+
+  <string name="yes">Sim</string>
+  <string name="no">Não</string>
+  <string name="call">Telefone</string>
+  <string name="cancel">Cancelar</string>
+
+  <string name="order_more_by_phone_or_email">Comprar mais por email ou telefone?</string>
+  <string name="no_supplier_contact">Não possui contato do fornecedor</string>
+  <string name="order_more_by_email">Pedir mais por email?</string>
+  <string name="order_more_by_phone">Pedir mais por telefone?</string>
+  <string name="invalid_number">Número inválido</string>
+  <string name="invalid_email">Email inválido</string>
+
+  <string name="email_subject">Novo pedido: %s</string>
+  <string name="email_message"><![CDATA[Oi %s!\n\nNós estamos precisando de mais %d itens do %s.\nPoderia mandar para nós?\n\n
+                                  Obrigado desde já!\nAbraços!]]></string>
+</resources>

@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,7 +116,7 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
     fabImageView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        startActivity(DetailsActivity.createIntent(InventoryActivity.this));
+        startActivity(DetailsActivity.createIntentNewProduct(InventoryActivity.this));
       }
     });
 
@@ -140,9 +139,14 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
     productsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.v(parent.toString(), "position: " + position + " id: " + id);
+        openEditProduct(id);
       }
     });
+  }
+
+  private void openEditProduct(long id) {
+    Uri productUri = ContentUris.withAppendedId(CONTENT_URI, id);
+    startActivity(DetailsActivity.createIntentEditProduct(this, productUri));
   }
 
   private void initLoader() {
@@ -153,9 +157,9 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
     int productsWasDeleted = getContentResolver().delete(CONTENT_URI, null, null);
 
     if (productsWasDeleted != -1) {
-      showToast(getString(R.string.dummy_delete_success));
+      showToast(getString(R.string.products_delete_success));
     } else {
-      showToast(getString(R.string.dummy_delete_error));
+      showToast(getString(R.string.products_delete_error));
     }
   }
 

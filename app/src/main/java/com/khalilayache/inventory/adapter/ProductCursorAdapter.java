@@ -49,7 +49,7 @@ public class ProductCursorAdapter extends CursorAdapter {
 
     name.setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
     description.setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)));
-    quantity.setText(String.format(context.getString(R.string.stock_mask), quantityValue));
+    quantity.setText(String.format(context.getString(R.string.quantity_mask), quantityValue));
     price.setText(String.format(context.getString(R.string.price_mask), priceValue));
     image.setImageURI(Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHOTO))));
 
