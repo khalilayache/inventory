@@ -12,7 +12,6 @@ import com.khalilayache.inventory.utils.AndroidUtils;
 
 public class ProductFactory {
 
-
   public static ArrayList<Product> createProductList(Context context) {
     ArrayList<Product> productsList = new ArrayList<>();
 

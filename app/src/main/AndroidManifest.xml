@@ -25,7 +25,6 @@
     <activity
         android:name=".ui.DetailsActivity"
         android:windowSoftInputMode="stateHidden"/>
-    <activity android:name=".ui.base.BaseActivity"/>
 
     <provider
         android:name="com.khalilayache.inventory.data.ProductProvider"

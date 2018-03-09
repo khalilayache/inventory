@@ -1,11 +1,13 @@
 package com.khalilayache.inventory.ui;
 
+import static com.khalilayache.inventory.utils.Constants.SPLASH_INTENT_TIME_DELAY;
+
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.khalilayache.inventory.R;
-import com.khalilayache.inventory.ui.base.BaseActivity;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

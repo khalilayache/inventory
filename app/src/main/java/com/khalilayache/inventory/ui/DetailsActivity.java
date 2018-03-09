@@ -12,6 +12,11 @@ import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COL
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_SUPPLIER_NAME;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_SUPPLIER_PHONE;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.CONTENT_URI;
+import static com.khalilayache.inventory.utils.AlertUtils.showAlertDialog;
+import static com.khalilayache.inventory.utils.AlertUtils.showToast;
+import static com.khalilayache.inventory.utils.Constants.EDIT_PRODUCT_LOADER_CODE;
+import static com.khalilayache.inventory.utils.Constants.PHOTO_INTENT_CODE;
+import static com.khalilayache.inventory.utils.Constants.STORAGE_REQUEST_CODE;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -37,6 +42,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,16 +54,23 @@ import android.widget.RelativeLayout;
 
 import com.khalilayache.inventory.R;
 import com.khalilayache.inventory.model.Product;
-import com.khalilayache.inventory.ui.base.BaseActivity;
 import com.khalilayache.inventory.utils.AndroidUtils;
 import com.khalilayache.inventory.utils.ProductUtils;
 
-public class DetailsActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+  EditText nameEditText;
+  EditText descriptionEditText;
+  EditText priceEditText;
+  EditText quantityEditText;
+  EditText supplierNameEditText;
+  EditText supplierEmailEditText;
+  EditText supplierPhoneEditText;
+  ImageView photoImageView;
+  RelativeLayout photoContainer;
+  LinearLayout orderMoreContainer;
   private Uri photoUri = null;
-
   private Uri productUri = null;
-
   private Product product = null;
 
   public static Intent createIntentNewProduct(Context context) {
@@ -138,12 +151,11 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
       if (data != null) {
         photoUri = data.getData();
 
-        ImageView photoView = findViewById(R.id.product_photo);
-        photoView.setImageURI(photoUri);
-        photoView.invalidate();
+        photoImageView.setImageURI(photoUri);
+        photoImageView.invalidate();
       }
     } else {
-      showToast(getString(R.string.action_canceled));
+      showToast(this, getString(R.string.action_canceled));
     }
 
   }
@@ -165,25 +177,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     }
 
     if (cursor.moveToFirst()) {
-      EditText name = findViewById(R.id.product_name);
-      EditText description = findViewById(R.id.product_description);
-      EditText price = findViewById(R.id.product_price);
-      EditText quantity = findViewById(R.id.product_quantity);
-      ImageView photo = findViewById(R.id.product_photo);
-      EditText supplierName = findViewById(R.id.supplier_name);
-      EditText supplierEmail = findViewById(R.id.supplier_email);
-      EditText supplierPhone = findViewById(R.id.supplier_phone);
-
-      product = new Product(
-          cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
-          cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
-          Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PRICE))),
-          Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_QUANTITY))),
-          cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHOTO)),
-          cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SUPPLIER_NAME)),
-          cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SUPPLIER_EMAIL)),
-          cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SUPPLIER_PHONE))
-      );
+      product = getProductFromCursor(cursor);
 
       String placeholderUri = AndroidUtils.getUriStringOfDrawable(R.drawable.item_list_placeholder, this);
 
@@ -193,36 +187,30 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
         photoUri = Uri.parse(product.getPhoto());
       }
 
-      name.setText(product.getName());
-      description.setText(product.getDescription());
-      price.setText(String.format(Locale.getDefault(), getString(R.string.price_format), product.getPrice()));
-      quantity.setText(String.format(Locale.getDefault(), getString(R.string.quantity_format), product.getQuantity()));
-      photo.setImageURI(photoUri);
-      supplierName.setText(product.getSupplierName());
-      supplierEmail.setText(product.getSupplierEmail());
-      supplierPhone.setText(product.getSupplierPhone());
+      nameEditText.setText(product.getName());
+
+      descriptionEditText.setText(product.getDescription());
+      priceEditText.setText(String.format(Locale.getDefault(), getString(R.string.price_format), product.getPrice()));
+
+      quantityEditText.setText(String.format(Locale.getDefault(), getString(R.string.quantity_format), product.getQuantity()));
+      photoImageView.setImageURI(photoUri);
+
+      supplierNameEditText.setText(product.getSupplierName());
+      supplierEmailEditText.setText(product.getSupplierEmail());
+      supplierPhoneEditText.setText(product.getSupplierPhone());
     }
   }
 
   @Override
   public void onLoaderReset(Loader<Cursor> loader) {
-    EditText name = findViewById(R.id.product_name);
-    EditText description = findViewById(R.id.product_description);
-    EditText price = findViewById(R.id.product_price);
-    EditText quantity = findViewById(R.id.product_quantity);
-    ImageView photo = findViewById(R.id.product_photo);
-    EditText supplierName = findViewById(R.id.supplier_name);
-    EditText supplierEmail = findViewById(R.id.supplier_email);
-    EditText supplierPhone = findViewById(R.id.supplier_phone);
-
-    name.setText("");
-    description.setText("");
-    price.setText("");
-    quantity.setText("");
-    photo.setImageResource(R.drawable.photo_placeholder);
-    supplierName.setText("");
-    supplierEmail.setText("");
-    supplierPhone.setText("");
+    nameEditText.setText("");
+    descriptionEditText.setText("");
+    priceEditText.setText("");
+    quantityEditText.setText("");
+    photoImageView.setImageResource(R.drawable.photo_placeholder);
+    supplierNameEditText.setText("");
+    supplierEmailEditText.setText("");
+    supplierPhoneEditText.setText("");
   }
 
   @Override
@@ -230,79 +218,10 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     showUnsavedChanges();
   }
 
-  private void initListeners() {
-    RelativeLayout photoContainer = findViewById(R.id.photo_container);
-
-    photoContainer.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        checkReadStoragePermission();
-      }
-    });
-
-    LinearLayout orderMoreContainer = findViewById(R.id.order_more_container);
-
-    orderMoreContainer.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        checkHowOrderMore();
-      }
-    });
-  }
-
-  private void checkHowOrderMore() {
-    Product contactProduct = getProduct();
-
-    if (!contactProduct.getSupplierPhone().isEmpty() && !contactProduct.getSupplierEmail().isEmpty()) {
-      AlertDialog dialog = new AlertDialog.Builder(this)
-          .setMessage(R.string.order_more_by_phone_or_email)
-          .setPositiveButton(R.string.email, clickOrderEmail())
-          .setNegativeButton(R.string.call, clickOrderCall())
-          .setNeutralButton(R.string.cancel, clickCancel())
-          .create();
-      dialog.show();
-    } else if (!contactProduct.getSupplierEmail().isEmpty()) {
-      AlertDialog dialog = new AlertDialog.Builder(this)
-          .setMessage(R.string.order_more_by_email)
-          .setPositiveButton(R.string.yes, clickOrderEmail())
-          .setNegativeButton(R.string.no, clickCancel())
-          .create();
-      dialog.show();
-    } else if (!contactProduct.getSupplierPhone().isEmpty()) {
-      AlertDialog dialog = new AlertDialog.Builder(this)
-          .setMessage(R.string.order_more_by_phone)
-          .setPositiveButton(R.string.yes, clickOrderCall())
-          .setNegativeButton(R.string.no, clickCancel())
-          .create();
-      dialog.show();
-    } else {
-      showToast(getString(R.string.no_supplier_contact));
-    }
-  }
-
-  private void orderMoreByPhone(String phoneNumber) {
-    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(getString(R.string.intent_phone_type, phoneNumber)));
-    startActivity(intent);
-  }
-
-  private void orderMoreByEmail(String email) {
-    Intent intent = new Intent(android.content.Intent.ACTION_SENDTO);
-    intent.setType(getString(R.string.intent_email_type));
-    intent.setData(Uri.parse(getString(R.string.intent_email_mail_to, email)));
-    intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.email_subject, getProduct().getName()));
-    String message = getString(
-        R.string.email_message,
-        getProduct().getSupplierName(),
-        getRandomIntNumber(),
-        getProduct().getName());
-    intent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-    startActivity(intent);
-  }
-
   private void initActivity() {
     initActionBar();
+    initViews();
 
-    LinearLayout orderMoreContainer = findViewById(R.id.order_more_container);
     if (productUri != null) {
       orderMoreContainer.setVisibility(VISIBLE);
 
@@ -323,6 +242,35 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
         getSupportActionBar().setTitle(R.string.add_new_product);
       }
     }
+  }
+
+  private void initViews() {
+    nameEditText = findViewById(R.id.product_name);
+    descriptionEditText = findViewById(R.id.product_description);
+    priceEditText = findViewById(R.id.product_price);
+    quantityEditText = findViewById(R.id.product_quantity);
+    supplierNameEditText = findViewById(R.id.supplier_name);
+    supplierEmailEditText = findViewById(R.id.supplier_email);
+    supplierPhoneEditText = findViewById(R.id.supplier_phone);
+    photoImageView = findViewById(R.id.product_photo);
+    photoContainer = findViewById(R.id.photo_container);
+    orderMoreContainer = findViewById(R.id.order_more_container);
+  }
+
+  private void initListeners() {
+    photoContainer.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        checkReadStoragePermission();
+      }
+    });
+
+    orderMoreContainer.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        checkHowOrderMore();
+      }
+    });
   }
 
   private void checkReadStoragePermission() {
@@ -380,7 +328,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
           finish();
         }
       } else {
-        showToast(getString(R.string.no_changes_made));
+        showToast(this, getString(R.string.no_changes_made));
         finish();
       }
     } else {
@@ -396,9 +344,9 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     Uri updateURI = ContentUris.withAppendedId(CONTENT_URI, id);
     int rowUpdated = getContentResolver().update(updateURI, contentValues, null, null);
     if (rowUpdated == 1) {
-      showToast(getString(R.string.product_updated));
+      showToast(this, getString(R.string.product_updated));
       finish();
-    } else { showToast(getString(R.string.product_not_updated));}
+    } else { showToast(this, getString(R.string.product_not_updated));}
   }
 
   private void saveNewProduct() {
@@ -407,9 +355,9 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     Long newProductWasAdded = ContentUris.parseId(getContentResolver().insert(CONTENT_URI, values));
 
     if (newProductWasAdded != -1) {
-      showToast(getString(R.string.new_add_success));
+      showToast(this, getString(R.string.new_add_success));
     } else {
-      showToast(getString(R.string.new_add_error));
+      showToast(this, getString(R.string.new_add_error));
     }
   }
 
@@ -444,7 +392,57 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
         errorMessage = errorMessage.concat("\n" + errorsList.get(i));
       }
     }
-    showToast(errorMessage);
+    showToast(this, errorMessage);
+  }
+
+  private void checkHowOrderMore() {
+    Product contactProduct = getProduct();
+
+    if (!contactProduct.getSupplierPhone().isEmpty() && !contactProduct.getSupplierEmail().isEmpty()) {
+      showAlertDialog(this,
+          getString(R.string.order_more_by_phone_or_email),
+          getString(R.string.email),
+          getString(R.string.call),
+          getString(R.string.cancel),
+          clickOrderEmail(),
+          clickOrderCall(),
+          clickCancel());
+    } else if (!contactProduct.getSupplierEmail().isEmpty()) {
+      showAlertDialog(this,
+          getString(R.string.order_more_by_email),
+          getString(R.string.yes),
+          getString(R.string.no),
+          clickOrderEmail(),
+          clickCancel());
+    } else if (!contactProduct.getSupplierPhone().isEmpty()) {
+      showAlertDialog(this,
+          getString(R.string.order_more_by_phone),
+          getString(R.string.yes),
+          getString(R.string.no),
+          clickOrderCall(),
+          clickCancel());
+    } else {
+      showToast(this, getString(R.string.no_supplier_contact));
+    }
+  }
+
+  private void orderMoreByPhone(String phoneNumber) {
+    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(getString(R.string.intent_phone_type, phoneNumber)));
+    startActivity(intent);
+  }
+
+  private void orderMoreByEmail(String email) {
+    Intent intent = new Intent(android.content.Intent.ACTION_SENDTO);
+    intent.setType(getString(R.string.intent_email_type));
+    intent.setData(Uri.parse(getString(R.string.intent_email_mail_to, email)));
+    intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.email_subject, getProduct().getName()));
+    String message = getString(
+        R.string.email_message,
+        getProduct().getSupplierName(),
+        getRandomIntNumber(),
+        getProduct().getName());
+    intent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+    startActivity(intent);
   }
 
   private boolean hasDiffOrNewProduct() {
@@ -491,7 +489,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
         if (Patterns.PHONE.matcher(phoneNumber).matches()) {
           orderMoreByPhone(phoneNumber);
         } else {
-          showToast(getString(R.string.invalid_number));
+          showToast(DetailsActivity.this, getString(R.string.invalid_number));
         }
       }
     };
@@ -506,7 +504,7 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
         if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
           orderMoreByEmail(email);
         } else {
-          showToast(getString(R.string.invalid_email));
+          showToast(DetailsActivity.this, getString(R.string.invalid_email));
         }
       }
     };
@@ -540,10 +538,10 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
           int rowsDeleted = getContentResolver().delete(productUri, null, null);
 
           if (rowsDeleted == 1) {
-            showToast(getString(R.string.delete_success));
+            showToast(DetailsActivity.this, getString(R.string.delete_success));
             finish();
           } else {
-            showToast(getString(R.string.delete_error));
+            showToast(DetailsActivity.this, getString(R.string.delete_error));
           }
         }
       }
@@ -555,23 +553,15 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
       photoUri = Uri.parse(AndroidUtils.getUriStringOfDrawable(R.drawable.item_list_placeholder, this));
     }
 
-    EditText productName = findViewById(R.id.product_name);
-    EditText productDescription = findViewById(R.id.product_description);
-    EditText productPrice = findViewById(R.id.product_price);
-    EditText productQuantity = findViewById(R.id.product_quantity);
-    EditText productSupplierName = findViewById(R.id.supplier_name);
-    EditText productSupplierEmail = findViewById(R.id.supplier_email);
-    EditText productSupplierPhone = findViewById(R.id.supplier_phone);
-
-    String name = productName.getText().toString();
-    String description = productDescription.getText().toString();
+    String name = nameEditText.getText().toString();
+    String description = descriptionEditText.getText().toString();
     String photo = String.valueOf(photoUri);
-    String supplierName = productSupplierName.getText().toString();
-    String supplierEmail = productSupplierEmail.getText().toString();
-    String supplierPhone = productSupplierPhone.getText().toString();
+    String supplierName = supplierNameEditText.getText().toString();
+    String supplierEmail = supplierEmailEditText.getText().toString();
+    String supplierPhone = supplierPhoneEditText.getText().toString();
 
-    String priceString = productPrice.getText().toString();
-    String quantityString = productQuantity.getText().toString();
+    String priceString = priceEditText.getText().toString();
+    String quantityString = quantityEditText.getText().toString();
 
     Double price = 0.0;
     Integer quantity = 0;
@@ -589,5 +579,18 @@ public class DetailsActivity extends BaseActivity implements LoaderManager.Loade
     }
 
     return new Product(name, description, price, quantity, photo, supplierName, supplierEmail, supplierPhone);
+  }
+
+  private Product getProductFromCursor(Cursor cursor) {
+    return new Product(
+        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
+        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
+        Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PRICE))),
+        Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_QUANTITY))),
+        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHOTO)),
+        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SUPPLIER_NAME)),
+        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SUPPLIER_EMAIL)),
+        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SUPPLIER_PHONE))
+    );
   }
 }

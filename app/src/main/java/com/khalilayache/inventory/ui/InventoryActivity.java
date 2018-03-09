@@ -8,6 +8,8 @@ import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COL
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_QUANTITY;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.CONTENT_URI;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry._ID;
+import static com.khalilayache.inventory.utils.AlertUtils.showToast;
+import static com.khalilayache.inventory.utils.Constants.PRODUCT_LOADER_CODE;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -19,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,10 +32,9 @@ import android.widget.ListView;
 import com.khalilayache.inventory.R;
 import com.khalilayache.inventory.adapter.ProductCursorAdapter;
 import com.khalilayache.inventory.repository.ProductRepository;
-import com.khalilayache.inventory.ui.base.BaseActivity;
 import com.khalilayache.inventory.utils.ProductUtils;
 
-public class InventoryActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, SellItemListClick {
+public class InventoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SellItemListClick {
 
   private ListView productsList;
 
@@ -157,9 +159,9 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
     int productsWasDeleted = getContentResolver().delete(CONTENT_URI, null, null);
 
     if (productsWasDeleted != -1) {
-      showToast(getString(R.string.products_delete_success));
+      showToast(this, getString(R.string.products_delete_success));
     } else {
-      showToast(getString(R.string.products_delete_error));
+      showToast(this, getString(R.string.products_delete_error));
     }
   }
 
@@ -171,15 +173,15 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
     Long dummyProductWasAdded = ContentUris.parseId(getContentResolver().insert(CONTENT_URI, values));
 
     if (dummyProductWasAdded != -1) {
-      showToast(getString(R.string.dummy_add_success));
+      showToast(this, getString(R.string.dummy_add_success));
     } else {
-      showToast(getString(R.string.dummy_add_error));
+      showToast(this, getString(R.string.dummy_add_error));
     }
   }
 
   private void sellListItem(int id, int quantityInStock) {
     if (quantityInStock == 0) {
-      showToast(getString(R.string.product_out_stock));
+      showToast(this, getString(R.string.product_out_stock));
       return;
     }
 
@@ -190,9 +192,9 @@ public class InventoryActivity extends BaseActivity implements LoaderManager.Loa
     int rowsUpdated = getContentResolver().update(updateURI, contentValues, null, null);
 
     if (rowsUpdated < 1) {
-      showToast(getString(R.string.product_sold_error));
+      showToast(this, getString(R.string.product_sold_error));
     } else {
-      showToast(getString(R.string.product_sold_success));
+      showToast(this, getString(R.string.product_sold_success));
     }
   }
 }

@@ -130,7 +130,6 @@ public class ProductProvider extends ContentProvider {
   }
 
   private Uri insertProduct(Uri uri, ContentValues values) {
-
     SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
 
     long id = database.insert(InventoryContract.ProductEntry.TABLE_NAME, null, values);
