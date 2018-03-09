@@ -12,8 +12,6 @@ import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COL
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_SUPPLIER_NAME;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_SUPPLIER_PHONE;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.CONTENT_URI;
-import static com.khalilayache.inventory.utils.AlertUtils.showAlertDialog;
-import static com.khalilayache.inventory.utils.AlertUtils.showToast;
 import static com.khalilayache.inventory.utils.Constants.EDIT_PRODUCT_LOADER_CODE;
 import static com.khalilayache.inventory.utils.Constants.PHOTO_INTENT_CODE;
 import static com.khalilayache.inventory.utils.Constants.STORAGE_REQUEST_CODE;
@@ -41,7 +39,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.Menu;
@@ -54,24 +51,27 @@ import android.widget.RelativeLayout;
 
 import com.khalilayache.inventory.R;
 import com.khalilayache.inventory.model.Product;
+import com.khalilayache.inventory.utils.AlertUtils;
 import com.khalilayache.inventory.utils.AndroidUtils;
 import com.khalilayache.inventory.utils.ProductUtils;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-  EditText nameEditText;
-  EditText descriptionEditText;
-  EditText priceEditText;
-  EditText quantityEditText;
-  EditText supplierNameEditText;
-  EditText supplierEmailEditText;
-  EditText supplierPhoneEditText;
-  ImageView photoImageView;
-  RelativeLayout photoContainer;
-  LinearLayout orderMoreContainer;
+  private EditText nameEditText;
+  private EditText descriptionEditText;
+  private EditText priceEditText;
+  private EditText quantityEditText;
+  private EditText supplierNameEditText;
+  private EditText supplierEmailEditText;
+  private EditText supplierPhoneEditText;
+  private ImageView photoImageView;
+  private RelativeLayout photoContainer;
+  private LinearLayout orderMoreContainer;
   private Uri photoUri = null;
   private Uri productUri = null;
   private Product product = null;
+
+  private AlertUtils alertUtils = new AlertUtils(this);
 
   public static Intent createIntentNewProduct(Context context) {
     return new Intent(context, DetailsActivity.class);
@@ -155,7 +155,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         photoImageView.invalidate();
       }
     } else {
-      showToast(this, getString(R.string.action_canceled));
+      alertUtils.showToast(getString(R.string.action_canceled));
     }
 
   }
@@ -203,14 +203,14 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
   @Override
   public void onLoaderReset(Loader<Cursor> loader) {
-    nameEditText.setText("");
-    descriptionEditText.setText("");
-    priceEditText.setText("");
-    quantityEditText.setText("");
+    nameEditText.getText().clear();
+    descriptionEditText.getText().clear();
+    priceEditText.getText().clear();
+    quantityEditText.getText().clear();
     photoImageView.setImageResource(R.drawable.photo_placeholder);
-    supplierNameEditText.setText("");
-    supplierEmailEditText.setText("");
-    supplierPhoneEditText.setText("");
+    supplierNameEditText.getText().clear();
+    supplierEmailEditText.getText().clear();
+    supplierPhoneEditText.getText().clear();
   }
 
   @Override
@@ -328,7 +328,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
           finish();
         }
       } else {
-        showToast(this, getString(R.string.no_changes_made));
+        alertUtils.showToast(getString(R.string.no_changes_made));
         finish();
       }
     } else {
@@ -344,9 +344,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     Uri updateURI = ContentUris.withAppendedId(CONTENT_URI, id);
     int rowUpdated = getContentResolver().update(updateURI, contentValues, null, null);
     if (rowUpdated == 1) {
-      showToast(this, getString(R.string.product_updated));
+      alertUtils.showToast(getString(R.string.product_updated));
       finish();
-    } else { showToast(this, getString(R.string.product_not_updated));}
+    } else { alertUtils.showToast(getString(R.string.product_not_updated));}
   }
 
   private void saveNewProduct() {
@@ -355,29 +355,29 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     Long newProductWasAdded = ContentUris.parseId(getContentResolver().insert(CONTENT_URI, values));
 
     if (newProductWasAdded != -1) {
-      showToast(this, getString(R.string.new_add_success));
+      alertUtils.showToast(getString(R.string.new_add_success));
     } else {
-      showToast(this, getString(R.string.new_add_error));
+      alertUtils.showToast(getString(R.string.new_add_error));
     }
   }
 
   private void showDeleteConfirmation() {
-    AlertDialog dialog = new AlertDialog.Builder(this)
-        .setMessage(R.string.want_delete_item)
-        .setPositiveButton(R.string.yes, clickDeleteConfirm())
-        .setNegativeButton(R.string.no, clickCancel())
-        .create();
-    dialog.show();
+    alertUtils.showAlertDialog(
+        getString(R.string.want_delete_item),
+        getString(R.string.yes),
+        getString(R.string.no),
+        clickDeleteConfirm(),
+        clickCancel());
   }
 
   private void showUnsavedChanges() {
     if (hasDiffOrNewProduct()) {
-      AlertDialog dialog = new AlertDialog.Builder(this)
-          .setMessage(R.string.want_discard_changes)
-          .setPositiveButton(R.string.yes, clickDiscardChanges())
-          .setNegativeButton(R.string.no, clickCancel())
-          .create();
-      dialog.show();
+      alertUtils.showAlertDialog(
+          getString(R.string.want_discard_changes),
+          getString(R.string.yes),
+          getString(R.string.no),
+          clickDiscardChanges(),
+          clickCancel());
     } else {
       super.onBackPressed();
     }
@@ -392,14 +392,14 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         errorMessage = errorMessage.concat("\n" + errorsList.get(i));
       }
     }
-    showToast(this, errorMessage);
+    alertUtils.showToast(errorMessage);
   }
 
   private void checkHowOrderMore() {
     Product contactProduct = getProduct();
 
     if (!contactProduct.getSupplierPhone().isEmpty() && !contactProduct.getSupplierEmail().isEmpty()) {
-      showAlertDialog(this,
+      alertUtils.showAlertDialog(
           getString(R.string.order_more_by_phone_or_email),
           getString(R.string.email),
           getString(R.string.call),
@@ -408,21 +408,21 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
           clickOrderCall(),
           clickCancel());
     } else if (!contactProduct.getSupplierEmail().isEmpty()) {
-      showAlertDialog(this,
+      alertUtils.showAlertDialog(
           getString(R.string.order_more_by_email),
           getString(R.string.yes),
           getString(R.string.no),
           clickOrderEmail(),
           clickCancel());
     } else if (!contactProduct.getSupplierPhone().isEmpty()) {
-      showAlertDialog(this,
+      alertUtils.showAlertDialog(
           getString(R.string.order_more_by_phone),
           getString(R.string.yes),
           getString(R.string.no),
           clickOrderCall(),
           clickCancel());
     } else {
-      showToast(this, getString(R.string.no_supplier_contact));
+      alertUtils.showToast(getString(R.string.no_supplier_contact));
     }
   }
 
@@ -450,29 +450,13 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
     if (product == null) {
       Product newProduct = getProduct();
-
-      return !(newProduct.getName().isEmpty() &&
-          newProduct.getDescription().isEmpty() &&
-          newProduct.getPrice() == 0.0 &&
-          newProduct.getQuantity() == 0 &&
-          newProduct.getPhoto().equals(itemPlaceholderUri) &&
-          newProduct.getSupplierName().isEmpty() &&
-          newProduct.getSupplierEmail().isEmpty() &&
-          newProduct.getSupplierPhone().isEmpty());
+      return newProduct.isEmpty(itemPlaceholderUri);
     }
 
     Product diffProduct = getProduct();
     String placeholderUri = AndroidUtils.getUriStringOfDrawable(R.drawable.photo_placeholder, this);
 
-    return !diffProduct.getName().equals(product.getName()) ||
-        !diffProduct.getDescription().equals(product.getDescription()) ||
-        !diffProduct.getPrice().equals(product.getPrice()) ||
-        !diffProduct.getQuantity().equals(product.getQuantity()) ||
-        (!(diffProduct.getPhoto().equals(placeholderUri) && product.getPhoto().equals(itemPlaceholderUri)) && !diffProduct
-            .getPhoto().equals(product.getPhoto())) ||
-        !diffProduct.getSupplierName().equals(product.getSupplierName()) ||
-        !diffProduct.getSupplierEmail().equals(product.getSupplierEmail()) ||
-        !diffProduct.getSupplierPhone().equals(product.getSupplierPhone());
+    return diffProduct.hasDiff(product, itemPlaceholderUri, placeholderUri);
 
   }
 
@@ -489,7 +473,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         if (Patterns.PHONE.matcher(phoneNumber).matches()) {
           orderMoreByPhone(phoneNumber);
         } else {
-          showToast(DetailsActivity.this, getString(R.string.invalid_number));
+          alertUtils.showToast(getString(R.string.invalid_number));
         }
       }
     };
@@ -504,7 +488,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
           orderMoreByEmail(email);
         } else {
-          showToast(DetailsActivity.this, getString(R.string.invalid_email));
+          alertUtils.showToast(getString(R.string.invalid_email));
         }
       }
     };
@@ -538,10 +522,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
           int rowsDeleted = getContentResolver().delete(productUri, null, null);
 
           if (rowsDeleted == 1) {
-            showToast(DetailsActivity.this, getString(R.string.delete_success));
+            alertUtils.showToast(getString(R.string.delete_success));
             finish();
           } else {
-            showToast(DetailsActivity.this, getString(R.string.delete_error));
+            alertUtils.showToast(getString(R.string.delete_error));
           }
         }
       }

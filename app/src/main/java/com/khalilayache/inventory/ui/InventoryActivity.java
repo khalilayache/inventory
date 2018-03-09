@@ -8,7 +8,6 @@ import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COL
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.COLUMN_QUANTITY;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry.CONTENT_URI;
 import static com.khalilayache.inventory.data.InventoryContract.ProductEntry._ID;
-import static com.khalilayache.inventory.utils.AlertUtils.showToast;
 import static com.khalilayache.inventory.utils.Constants.PRODUCT_LOADER_CODE;
 
 import android.content.ContentUris;
@@ -32,13 +31,18 @@ import android.widget.ListView;
 import com.khalilayache.inventory.R;
 import com.khalilayache.inventory.adapter.ProductCursorAdapter;
 import com.khalilayache.inventory.repository.ProductRepository;
+import com.khalilayache.inventory.utils.AlertUtils;
 import com.khalilayache.inventory.utils.ProductUtils;
 
 public class InventoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SellItemListClick {
 
-  private ListView productsList;
-
   private ProductCursorAdapter productCursorAdapter;
+
+  private ListView productsList;
+  private ImageView fabImageView;
+  private View emptyView;
+
+  private AlertUtils alertUtils = new AlertUtils(this);
 
   public static Intent createIntent(Context context) {
     return new Intent(context, InventoryActivity.class);
@@ -113,7 +117,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
   }
 
   private void initFabListener() {
-    ImageView fabImageView = findViewById(R.id.add_new_item);
+    fabImageView = findViewById(R.id.add_new_item);
 
     fabImageView.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -131,7 +135,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
 
   private void initList() {
     productsList = findViewById(R.id.inventory_list);
-    View emptyView = findViewById(R.id.empty_view);
+    emptyView = findViewById(R.id.empty_view);
 
     productCursorAdapter = new ProductCursorAdapter(this, this);
 
@@ -159,9 +163,9 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     int productsWasDeleted = getContentResolver().delete(CONTENT_URI, null, null);
 
     if (productsWasDeleted != -1) {
-      showToast(this, getString(R.string.products_delete_success));
+      alertUtils.showToast(getString(R.string.products_delete_success));
     } else {
-      showToast(this, getString(R.string.products_delete_error));
+      alertUtils.showToast(getString(R.string.products_delete_error));
     }
   }
 
@@ -173,15 +177,15 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     Long dummyProductWasAdded = ContentUris.parseId(getContentResolver().insert(CONTENT_URI, values));
 
     if (dummyProductWasAdded != -1) {
-      showToast(this, getString(R.string.dummy_add_success));
+      alertUtils.showToast(getString(R.string.dummy_add_success));
     } else {
-      showToast(this, getString(R.string.dummy_add_error));
+      alertUtils.showToast(getString(R.string.dummy_add_error));
     }
   }
 
   private void sellListItem(int id, int quantityInStock) {
     if (quantityInStock == 0) {
-      showToast(this, getString(R.string.product_out_stock));
+      alertUtils.showToast(getString(R.string.product_out_stock));
       return;
     }
 
@@ -192,9 +196,9 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     int rowsUpdated = getContentResolver().update(updateURI, contentValues, null, null);
 
     if (rowsUpdated < 1) {
-      showToast(this, getString(R.string.product_sold_error));
+      alertUtils.showToast(getString(R.string.product_sold_error));
     } else {
-      showToast(this, getString(R.string.product_sold_success));
+      alertUtils.showToast(getString(R.string.product_sold_success));
     }
   }
 }

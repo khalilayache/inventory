@@ -7,16 +7,22 @@ import android.widget.Toast;
 
 public class AlertUtils {
 
-  private static Toast toast;
+  private Context context;
+  private Toast toast;
+  private AlertDialog dialog;
 
-  public static void showToast(Context context, String message) {
+  public AlertUtils(Context context) {
+    this.context = context;
+  }
+
+  public void showToast(String message) {
     if (toast != null) { toast.cancel(); }
 
     toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
     toast.show();
   }
 
-  public static void showAlertDialog(Context context,
+  public void showAlertDialog(
       String message,
       String positiveString,
       String negativeString,
@@ -24,7 +30,7 @@ public class AlertUtils {
       OnClickListener positiveListener,
       OnClickListener negativeListener,
       OnClickListener neutralListener) {
-    AlertDialog dialog = new AlertDialog.Builder(context)
+    dialog = new AlertDialog.Builder(context)
         .setMessage(message)
         .setPositiveButton(positiveString, positiveListener)
         .setNegativeButton(negativeString, negativeListener)
@@ -33,13 +39,13 @@ public class AlertUtils {
     dialog.show();
   }
 
-  public static void showAlertDialog(Context context,
+  public void showAlertDialog(
       String message,
       String positiveString,
       String negativeString,
       OnClickListener positiveListener,
       OnClickListener negativeListener) {
-    AlertDialog dialog = new AlertDialog.Builder(context)
+    dialog = new AlertDialog.Builder(context)
         .setMessage(message)
         .setPositiveButton(positiveString, positiveListener)
         .setNegativeButton(negativeString, negativeListener)
